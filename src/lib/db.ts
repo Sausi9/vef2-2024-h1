@@ -60,7 +60,7 @@ export async function query(
 
 export async function conditionalUpdate(
   table: 'teams' | 'games',
-  id: number,
+  id: string | number,
   fields: Array<string | null>,
   values: Array<string | number | null>,
 ) {
@@ -142,10 +142,12 @@ export async function deleteTeamBySlug(slug: string): Promise<boolean> {
 }
 
 export async function insertTeam(team: Omit<Team, 'id'>,silent = false,): Promise<Team| null> {
-  const { name } = team;
+  const name  = team.name;
+  const slug  = team.slug;
+  const description = team.description;
   const result = await query(
-    'INSERT INTO team (name, slug, description) VALUES ($1, $2, $3) RETURNING id, name, slug, description, created, updated',
-    [name],
+    'INSERT INTO teams (name, slug, description) VALUES ($1, $2, $3) RETURNING id, name, slug, description, created, updated',
+    [name, slug, description],
     silent,
   );
 
@@ -234,3 +236,38 @@ export async function getUserByUserName(
 
   return user;
 }
+
+export async function getUserByUserId(
+  userId: string,
+): Promise<USER | null> {
+  const result = await query(`SELECT * FROM users WHERE id = $1`, [
+    userId,
+  ]);
+
+  if (!result) {
+    return null;
+  }
+
+  const user = UserMapper(result.rows[0]);
+
+  return user;
+}
+
+
+export async function insertUser(
+  user: Omit<USER, 'id'>,
+  silent = false,
+): Promise<USER | null> {
+  const {name, password  } = user;
+  const result = await query(
+    'INSERT INTO users (name, password) VALUES ($1, $2) RETURNING *',
+    [ name, password],
+    silent,
+  );
+
+  const mapped = UserMapper(result?.rows[0]);
+
+  return mapped;
+}
+
+

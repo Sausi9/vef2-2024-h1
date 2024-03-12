@@ -28,4 +28,12 @@ export function initialize(passport, getUserByName, getUserById){
     passport.deserializeUser((id, done) => {
         return done(null, getUserById(id))
     });
+
+    const availableName = async(name, done) => {
+        const user = await getUserByName(name);
+        if(user == null){
+            return done(null, false, {message: "Username is already taken"});
+        }
+        return done(null, true);
+    }
 }

@@ -13,14 +13,14 @@ import session from 'express-session';
 import { environment } from './lib/environment.js';
 import { logger } from './lib/logger.js';
 import methodOverride from 'method-override';
-import { getUserByUserName } from './lib/db.js';
+import { getUserByUserId, getUserByUserName } from './lib/db.js';
 import { adminRouter } from './routes/admin.js';
 
 dotenv.config();
 
-const users: Array<USER> = []
+export const users: Array<USER> = []
 
-initialize(passport, name => users.find(user => user.name === name), id => users.find(user => user.id === id));
+initialize(passport, getUserByUserName, getUserByUserId);
 
 
 
@@ -61,7 +61,14 @@ app.use(passport.session())
 
 app.use(cors);
 
-app.get('/', checkAuthenticated,indexRouter);
+
+
+
+
+app.use('/',indexRouter);
+app.use('/',adminRouter);
+
+
 
 
 
@@ -70,7 +77,7 @@ app.get('/login', checkNotAuthenticated,(req, res) => {
 })
 
 app.post('/login', checkNotAuthenticated ,passport.authenticate('local', {
-  successRedirect:  '/',
+  successRedirect:  '/admin',
   failureRedirect: '/login',
   failureFlash: true
 }));
@@ -97,7 +104,7 @@ app.post('/register',  checkNotAuthenticated,async (req, res) => {
   
 })
 
-function checkAuthenticated(req,res, next){
+export function checkAuthenticated(req,res, next){
   if(req.isAuthenticated()){
     return next()
   }
@@ -105,7 +112,7 @@ function checkAuthenticated(req,res, next){
   res.redirect('/login')
 }
 
-function checkNotAuthenticated(req,res, next){
+export function checkNotAuthenticated(req,res, next){
   if(req.isAuthenticated()){
     res.redirect('/')
   }

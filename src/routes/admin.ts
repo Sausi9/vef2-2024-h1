@@ -1,13 +1,13 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
 export const adminRouter = express.Router();
 import { getTeam, listTeams, createTeam, updateTeam, deleteTeam  } from '../lib/teams.js';
 import { listGames, createGame, getGame, updateGame  } from '../lib/games.js';
+import { checkAuthenticated, checkNotAuthenticated } from '../app.js';
+import { logger } from '../lib/logger.js';
 
 
 
-
-
-export async function indexRoute(req: Request, res: Response) {
+export async function indexRoute(req, res) {
     return res.json([
         {
           href: '/teams',
@@ -28,15 +28,12 @@ export async function indexRoute(req: Request, res: Response) {
 
 
 
-adminRouter.get('/', indexRoute);
-adminRouter.get('/teams', listTeams);
-adminRouter.post('/teams', createTeam);
+adminRouter.get('/admin', checkAuthenticated,indexRoute);
+adminRouter.post('/teams', checkAuthenticated ,createTeam);
 
-adminRouter.get('/teams/:slug', getTeam);
-adminRouter.patch('/teams/:slug', updateTeam);
-adminRouter.delete('/teams/:slug', deleteTeam);
+adminRouter.patch('/teams/:slug', checkAuthenticated, updateTeam);
+adminRouter.delete('/teams/:slug', checkAuthenticated, deleteTeam);
 
-adminRouter.get('/games', listGames);
-adminRouter.post('/games', createGame);
-adminRouter.get('/games/:gameId', getGame);
-adminRouter.patch('/games/:gameid', updateGame);
+adminRouter.post('/games', checkAuthenticated, createGame);
+
+adminRouter.patch('/games/:gameid', checkAuthenticated,updateGame);
