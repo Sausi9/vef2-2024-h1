@@ -19,3 +19,11 @@ CREATE TABLE public.games (
   created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
+
+CREATE TABLE public.users (
+  id serial primary key,
+  name CHARACTER VARYING(64) NOT NULL,
+  password character varying(256) NOT NULL,
+  admin BOOLEAN DEFAULT false
+);

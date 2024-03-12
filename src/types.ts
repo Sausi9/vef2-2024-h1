@@ -50,4 +50,15 @@ export type TeamImport = {
 
     updated?: string;
   };
+
+
+  export type USER = {
+    id: string;
+    /** Title of the course. */
+    name: string;
+    /** Units for finishing course. */
+    password: string;
+    
+  };
+  
   

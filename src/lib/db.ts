@@ -1,10 +1,11 @@
 import pg from 'pg';
-import { Team, Game} from '../types.js';
+import { Team, Game, USER} from '../types.js';
 import {
   TeamMapper,
   TeamsMapper,
   GameMapper,
-  GamesMapper
+  GamesMapper,
+  UserMapper,
 } from './mappers.js';
 
 let savedPool: pg.Pool | undefined;
@@ -216,4 +217,20 @@ export async function getGames(): Promise<Array<Game> | null> {
   });
 
   return games;
+}
+
+export async function getUserByUserName(
+  userName: string,
+): Promise<USER | null> {
+  const result = await query(`SELECT * FROM users WHERE name = $1`, [
+    userName,
+  ]);
+
+  if (!result) {
+    return null;
+  }
+
+  const user = UserMapper(result.rows[0]);
+
+  return user;
 }

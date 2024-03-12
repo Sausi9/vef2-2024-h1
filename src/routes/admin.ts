@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-export const indexRouter = express.Router();
+export const adminRouter = express.Router();
 import { getTeam, listTeams, createTeam, updateTeam, deleteTeam  } from '../lib/teams.js';
 import { listGames, createGame, getGame, updateGame  } from '../lib/games.js';
 
@@ -28,19 +28,15 @@ export async function indexRoute(req: Request, res: Response) {
 
 
 
-indexRouter.get('/', indexRoute);
-indexRouter.get('/teams', listTeams);
-indexRouter.post('/teams', createTeam);
+adminRouter.get('/', indexRoute);
+adminRouter.get('/teams', listTeams);
+adminRouter.post('/teams', createTeam);
 
-indexRouter.get('/teams/:slug', getTeam);
-indexRouter.patch('/teams/:slug', updateTeam);
-indexRouter.delete('/teams/:slug', deleteTeam);
+adminRouter.get('/teams/:slug', getTeam);
+adminRouter.patch('/teams/:slug', updateTeam);
+adminRouter.delete('/teams/:slug', deleteTeam);
 
-indexRouter.get('/games', listGames);
-indexRouter.post('/games', createGame);
-indexRouter.get('/games/:gameId', getGame);
-indexRouter.patch('/games/:gameid', updateGame);
-
-
-
-
+adminRouter.get('/games', listGames);
+adminRouter.post('/games', createGame);
+adminRouter.get('/games/:gameId', getGame);
+adminRouter.patch('/games/:gameid', updateGame);

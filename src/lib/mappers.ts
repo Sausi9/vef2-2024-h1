@@ -1,6 +1,7 @@
 import {
     Team,
     Game,
+    USER,
   } from '../types.js';
   
 
@@ -75,5 +76,24 @@ import {
     const mapped = games.map(GameMapper);
   
     return mapped.filter((i): i is Game => Boolean(i));
+  }
+
+
+
+  export function UserMapper(potentialUser: unknown): USER | null {
+    const user = potentialUser as Partial<USER> | null;
+  
+    if (!user || !user.id || !user.name|| !user.password ) {
+      return null;
+    }
+  
+    const mapped:USER = {
+      id: user.id,
+      name: user.name,
+      password: user.password,
+     
+    };
+  
+    return mapped;
   }
   
