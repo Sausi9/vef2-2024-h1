@@ -9,7 +9,7 @@ import {
   export function TeamMapper(  potentialTeam: unknown ): Team| null {
     const team= potentialTeam as Partial<Team> | null;
   
-    if (!team  || !team.id || !team.name || !team.slug ) {
+    if (!team  ) {
       return null;
     }
   

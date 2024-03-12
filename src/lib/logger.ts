@@ -1,4 +1,13 @@
-export class Logger {
+export interface ILogger {
+  info: (...messages: unknown[]) => void;
+  warn: (...messages: unknown[]) => void;
+  error: (...messages: unknown[]) => void;
+}
+
+
+export class Logger implements ILogger {
+
+  private silent: boolean;
   constructor(silent = false) {
     this.silent = silent;
   }

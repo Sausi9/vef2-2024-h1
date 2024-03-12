@@ -1,1 +1,86 @@
+POST http://localhost:3001/register
+Content-Type: application/json
+
+{
+    "name": "Egill",
+    "password": "a"
+
+}
+
+####
+
+POST http://localhost:3001/login
+Content-Type: application/json
+
+{
+    "name": "Egill",
+    "password": "123"
+
+}
+
+
+####
+
+POST http://localhost:3001/login
+Content-Type: application/json
+
+{
+    "name": "admin",
+    "password": "123"
+
+}
+
+
+
+####
+POST http://localhost:3001/teams
+Content-Type: application/json
+
+{
+    "name": "TeamEgill"
+    
+
+}
+
+
+
+####
+GET http://localhost:3001/teams/teamegill
+
+
+####
 GET http://localhost:3001/teams
+
+
+
+
+
+####
+DELETE http://localhost:3001/teams/teamegill
+Content-Type: application/json
+
+{
+    "slug": "TeamEgill"
+}
+
+
+####
+PATCH  http://localhost:3001/teams/TeamEgill
+Content-Type: application/json
+
+{
+    "name": "TeamEgill",
+    "description": "Besta lið í heimi"
+}
+
+
+
+
+####
+GET http://localhost:3001/admin
+
+####
+GET http://localhost:3001/
+
+
+

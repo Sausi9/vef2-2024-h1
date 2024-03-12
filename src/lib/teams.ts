@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { getTeams, insertTeam , getTeamBySlug, conditionalUpdate, deleteTeamBySlug} from './db.js';
+import { getTeams, insertTeam , getTeamBySlug,conditionalUpdate ,deleteTeamBySlug} from './db.js';
 import { stringValidator, teamDoesNotExistValidator, xssSanitizer,validationCheck,genericSanitizer, atLeastOneBodyValueValidator} from './validation.js';
 import slugify from 'slugify';
 
@@ -24,7 +24,10 @@ export async function createTeamHandler(
     res: Response,
     next: NextFunction,
   ) {
-    const { name, description } = req.body;
+    const name  = req.body.name;
+    const description = req.body.description;
+    console.info(description)
+    console.log(name)
   
     const teamToCreate: Omit<Team, 'id'> = {
       name,
@@ -102,11 +105,12 @@ export const updateTeam = [
     if (!team) {
       return next();
     }
+    
   
-    const { name, description } = req.body;
+    const {name, description} = req.body;
   
     const fields = [
-      typeof name === 'string' && name ? 'title' : null,
+      typeof name === 'string' && name ? 'name' : null,
       typeof name === 'string' && name ? 'slug' : null,
       typeof description === 'string' && description ? 'description' : null,
     ];
@@ -119,7 +123,7 @@ export const updateTeam = [
   
     const updated = await conditionalUpdate(
       'teams',
-      name.id,
+      team.id,
       fields,
       values,
     );
@@ -152,3 +156,5 @@ export const updateTeam = [
   
     return res.status(204).json({});
   }
+
+
