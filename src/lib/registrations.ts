@@ -1,53 +1,51 @@
 import { NextFunction, Request, Response } from 'express';
-import { getTeams, insertTeam , getTeamBySlug,conditionalUpdate ,deleteTeamBySlug} from './db.js';
+import { getDatabase} from './db.js';
 import { stringValidator, teamDoesNotExistValidator, xssSanitizer,validationCheck,genericSanitizer, atLeastOneBodyValueValidator} from './validation.js';
 import slugify from 'slugify';
 
-import { Team } from '../types.js';
-import { TeamMapper } from './mappers.js';
+import { Registration } from '../types.js';
+import { RegistrationMapper } from './mappers.js';
 
 
-export async function listTeams(req: Request, res: Response, next: NextFunction) {
-    const teams = await getTeams();
+export async function listRegistrations(req: Request, res: Response, next: NextFunction) {
+    const registrations = await getDatabase()?.getRegistrations();
 
-    if (!teams) {
-        return next(new Error('unable to get teams'));
+    if (!registrations) {
+        return next(new Error('unable to get registrations'));
      
     }
 
-  return res.json(teams);
+  return res.json(registrations);
 }
 
 
-export async function createTeamHandler(
+export async function createRegistrationHandler(
     req: Request,
     res: Response,
     next: NextFunction,
   ) {
-    const name  = req.body.name;
-    const description = req.body.description;
-    console.info(description)
-    console.log(name)
+    const id  = req.body.id;
+    const user_id = req.body.userId;
+    const event_id = req.body.eventId;
   
-    const teamToCreate: Omit<Team, 'id'> = {
-      name,
-      slug: slugify(name),
-      description,
+    const registrationToCreate: Omit<Registration, 'id'> = {
+      userId: user_id,
+      eventId: event_id
     };
   
-    const createdteamm = await insertTeam(teamToCreate, false);
+    const createdRegistration= await getDatabase()?.insertRegistration(registrationToCreate);
   
-    if (!createdteamm) {
-      return next(new Error('unable to create team'));
+    if (!createdRegistration) {
+      return next(new Error('unable to create registration'));
     }
   
-    return res.status(201).json(createdteamm);
+    return res.status(201).json(createdRegistration);
   }
 
-export const createTeam = [
-    stringValidator({ field: 'name', maxLength: 64 }),
+export const createRegistration = [
+    stringValidator({ field: 'user_id', maxLength: 64 }),
     stringValidator({
-      field: 'description',
+      field: '',
       valueRequired: false,
       maxLength: 1000,
     }),
@@ -57,7 +55,7 @@ export const createTeam = [
     validationCheck,
     genericSanitizer('name'),
     genericSanitizer('description'),
-    createTeamHandler,
+    createRegistrationHandler,
   ];
 
 
