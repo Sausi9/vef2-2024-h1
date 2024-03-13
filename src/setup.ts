@@ -18,38 +18,38 @@ export async function dropSchema(dropFile = DROP_SCHEMA_FILE) {
   return getDatabase()?.query(data.toString("utf-8"));
 }
 
-async function create() {
-  const env = environment(process.env,loggerSingleton);
-  if(!env){
-    process.exit(1);
-  }
-  const drop = await dropSchema();
+async function create() { 
+    const env = environment(process.env,loggerSingleton);
+    if(!env){
+        process.exit(1);
+    }
+    const drop = await dropSchema();
 
-  if (drop) {
-    console.info("schema dropped");
-  } else {
-    console.info("schema not dropped, exiting");
-    process.exit(-1);
-  }
+    if (drop) {
+        console.info("schema dropped");
+    } else {
+        console.info("schema not dropped, exiting");
+        process.exit(-1);
+    }
 
-  const result = await createSchema();
+    const result = await createSchema();
 
-  if (result) {
-    console.info("schema created");
-  } else {
-    console.info("schema not created");
-  }
+    if (result) {
+        console.info("schema created");
+    } else {
+        console.info("schema not created");
+    }
 
-  const data = await readFile(INSERT_FILE);
-  const insert = await getDatabase()?.query(data.toString("utf-8"));
+    const data = await readFile(INSERT_FILE);
+    const insert = await getDatabase()?.query(data.toString("utf-8"));
 
-  if (insert) {
-    console.info("data inserted");
-  } else {
-    console.info("data not inserted");
-  }
+    if (insert) {
+        console.info("data inserted");
+    } else {
+        console.info("data not inserted");
+    }
 
-  await getDatabase()?.close();
+    await getDatabase()?.close();
 }
 
 create().catch((err) => {
