@@ -31,7 +31,7 @@ export function EventMapper(potentialEvent: unknown): DatabaseEvent | null {
   const imageURL = ""; // Placeholder: Generate or assign the imageURL as needed
 
   const mapped: DatabaseEvent = {
-    id: event.id!,
+    id: event.id,
     title: event.title,
     place: event.place,
     description: event.description,
