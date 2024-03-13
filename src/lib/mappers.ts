@@ -1,99 +1,76 @@
-import {
-    Team,
-    Game,
-    USER,
-  } from '../types.js';
-  
+import { Event, DatabaseEvent, Registration, USER } from '../types.js';
 
+export function DatabaseEventMapper(potentialEvent: unknown): Event | null {
+  const event = potentialEvent as Partial<DatabaseEvent> | null;
 
-  export function TeamMapper(  potentialTeam: unknown ): Team| null {
-    const team= potentialTeam as Partial<Team> | null;
-  
-    if (!team  ) {
-      return null;
-    }
-  
-    
-    const mapped: Team = {
-      id: team.id,
-      name: team.name,
-      slug: team.slug,
-      description: team.description ?? undefined,
-      created: team.created,
-      updated: team.updated,
-      
-    };
-  
-    return mapped;
-  }
-  
-  export function TeamsMapper(
-    potentialTeams: unknown,
-  ): Array<Team> {
-    const teams = potentialTeams as Array<unknown> | null;
-  
-    if (!teams) {
-      return [];
-    }
-  
-    const mapped = teams.map((team) => TeamMapper(team));
-  
-    return mapped.filter((i): i is Team => Boolean(i));
+  if (!event || !event.id || !event.title || !event.place || !event.description || !event.imageURL) {
+    return null;
   }
 
+  const mapped: Event = {
+    id: event.id,
+    title: event.title,
+    place: event.place,
+    description: event.description,
+  };
 
-  export function GameMapper(potentialGame: unknown): Game | null {
-    const game = potentialGame as Partial<Game> | null;
-  
-    if (!game || !game.id || !game.date|| !game.home || !game.away || !game.home_score || !game.away_score) {
-      return null;
-    }
-  
-    const mapped: Game = {
-      id: game.id,
-      date: game.date,
-      home: game.home,
-      away: game.away,
-      home_score: game.home_score ,
-      away_score: game.away_score ,
-      created: game.created,
-      updated: game.updated,
-     
-    };
-  
-    return mapped;
+  return mapped;
+}
+
+export function EventMapper(potentialEvent: unknown): DatabaseEvent | null {
+  const event = potentialEvent as Partial<Event> | null;
+
+  if (!event) {
+    return null;
   }
-  
-  export function GamesMapper(potentialGames: unknown): Array<Game> {
-    const games = potentialGames as Array<unknown> | null;
-  
-    if (!games || !Array.isArray(games)) {
-      return [];
-    }
-  
-    
-  
-    const mapped = games.map(GameMapper);
-  
-    return mapped.filter((i): i is Game => Boolean(i));
+  if (!event || !event.id || !event.title || !event.place || !event.description) {
+    return null;
   }
 
+  // Assuming you have a mechanism to generate or handle imageURL when mapping from Event to DatabaseEvent
+  const imageURL = ""; // Placeholder: Generate or assign the imageURL as needed
 
+  const mapped: DatabaseEvent = {
+    id: event.id!,
+    title: event.title,
+    place: event.place,
+    description: event.description,
+    imageURL: imageURL,
+  };
 
-  export function UserMapper(potentialUser: unknown): USER | null {
-    const user = potentialUser as Partial<USER> | null;
-  
-    if (!user || !user.id || !user.name|| !user.password ) {
-      return null;
-    }
-  
-    const mapped:USER = {
-      id: user.id,
-      name: user.name,
-      password: user.password,
-     
-    };
-  
-    return mapped;
+  return mapped;
+}
+
+export function RegistrationMapper(potentialRegistration: unknown): Registration | null {
+  const registration = potentialRegistration as Partial<Registration> | null;
+
+  if (!registration || !registration.id || !registration.userId || !registration.eventId) {
+    return null;
   }
-  
+
+  const mapped: Registration = {
+    id: registration.id,
+    userId: registration.userId,
+    eventId: registration.eventId,
+  };
+
+  return mapped;
+}
+
+export function UserMapper(potentialUser: unknown): USER | null {
+  const user = potentialUser as Partial<USER> | null;
+
+  if (!user || !user.id || !user.name || !user.password) {
+    return null;
+  }
+
+  const mapped: USER = {
+    id: user.id,
+    name: user.name,
+    password: user.password,
+  };
+
+  return mapped;
+}
+
+// Add any additional mapper functions as needed for other types or specific use cases
