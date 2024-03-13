@@ -1,7 +1,7 @@
 import express from 'express';
 export const adminRouter = express.Router();
-import { getTeam, listTeams, createTeam, updateTeam, deleteTeam  } from '../lib/teams.js';
-import { listGames, createGame, getGame, updateGame  } from '../lib/games.js';
+import { getTeam, listTeams, createTeam, updateTeam, deleteTeam  } from '../lib/registrations.js';
+import { listGames, createGame, getGame, updateGame  } from '../lib/events.js';
 import { checkAuthenticated, checkNotAuthenticated } from '../app.js';
 import { logger } from '../lib/logger.js';
 

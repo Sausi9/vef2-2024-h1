@@ -4,7 +4,7 @@ import slugify from 'slugify';
 import xss from 'xss';
 
 import {
-  getTeamBySlug,
+  getDatabase,
 } from './db.js';
 
 /**
@@ -103,14 +103,20 @@ export const stringValidator = ({
   return val;
 };
 
-
-
-export const teamDoesNotExistValidator = body('name').custom(
-  async (name) => {
-    if (await getTeamBySlug(slugify(name))) {
-      return Promise.reject(new Error('team with name already exists'));
+export const eventDoesNotExistValidator = body('id').custom(
+  async (id) => {
+    if (await getDatabase()?.getEvent(id)) {
+      return Promise.reject(new Error('Event with title already exists'));
     }
     return Promise.resolve();
   },
 );
 
+export const registrationDoesNotExistValidator = body('id').custom(
+  async (id) => {
+    if (await getDatabase()?.getRegistration(id)) {
+      return Promise.reject(new Error('Registration with ID already exists'));
+    }
+    return Promise.resolve();
+  },
+);
