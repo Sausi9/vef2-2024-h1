@@ -225,20 +225,20 @@ export class Database {
   async insertEvent(event: Omit<DatabaseEvent,'id'>
   ): Promise<DatabaseEvent | null> {
     const result = await this.query(
-      'INSERT INTO events (title, place, date, imageURL) VALUES ($1, $2, $3, $4) ON CONFLICT DO NOTHING RETURNING id, title, place, description,imageURL',
-      [event.title, event.place, event.date, event.imageURL],
+      'INSERT INTO events (title, place, event_image, date) VALUES ($1, $2, $3, $4) ON CONFLICT DO NOTHING RETURNING id, title, event_image, date',
+      [event.title, event.place, event.imageURL, event.date],
     );
     if (result) {
-      const resultTeam: DatabaseEvent = {
+      const resultEvent: DatabaseEvent = {
         id: result.rows[0].id,
         title: result.rows[0].title,
         place: result.rows[0].place,
         date: result.rows[0].date,
-        imageURL: result.rows[0].imageURL
+        imageURL: result.rows[0].event_image
       };
-      return resultTeam;
+      return resultEvent;
     }
-    this.logger.warn('unable to insert game', { result, event });
+    this.logger.warn('unable to insert event', { result, event });
     return null;
   }
 
