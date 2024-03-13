@@ -3,7 +3,7 @@ import { Event, DatabaseEvent, Registration, USER } from '../types.js';
 export function DatabaseEventMapper(potentialEvent: unknown): Event | null {
   const event = potentialEvent as Partial<DatabaseEvent> | null;
 
-  if (!event || !event.id || !event.title || !event.place || !event.description || !event.imageURL) {
+  if (!event || !event.id || !event.title || !event.place || !event.date || !event.imageURL) {
     return null;
   }
 
@@ -11,7 +11,7 @@ export function DatabaseEventMapper(potentialEvent: unknown): Event | null {
     id: event.id,
     title: event.title,
     place: event.place,
-    description: event.description,
+    date: event.date,
   };
 
   return mapped;
@@ -23,7 +23,7 @@ export function EventMapper(potentialEvent: unknown): DatabaseEvent | null {
   if (!event) {
     return null;
   }
-  if (!event || !event.id || !event.title || !event.place || !event.description) {
+  if (!event || !event.id || !event.title || !event.place || !event.date) {
     return null;
   }
 
@@ -34,7 +34,7 @@ export function EventMapper(potentialEvent: unknown): DatabaseEvent | null {
     id: event.id,
     title: event.title,
     place: event.place,
-    description: event.description,
+    date: event.date,
     imageURL: imageURL,
   };
 
@@ -44,12 +44,14 @@ export function EventMapper(potentialEvent: unknown): DatabaseEvent | null {
 export function RegistrationMapper(potentialRegistration: unknown): Registration | null {
   const registration = potentialRegistration as Partial<Registration> | null;
 
-  if (!registration || !registration.id || !registration.userId || !registration.eventId) {
+  if (!registration || !registration.id ||!registration.username|| !registration.eventTitle|| !registration.userId || !registration.eventId) {
     return null;
   }
 
   const mapped: Registration = {
     id: registration.id,
+    username: registration.username,
+    eventTitle: registration.eventTitle,
     userId: registration.userId,
     eventId: registration.eventId,
   };

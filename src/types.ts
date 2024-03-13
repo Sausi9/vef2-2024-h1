@@ -2,7 +2,6 @@ export type Event = {
   id: string;
   title: string;
   place: string;
-  description: string;
   date: string;
 }
 
@@ -10,7 +9,7 @@ export type DatabaseEvent = {
   id: string;
   title: string;
   place: string;
-  description: string;
+  date:string;
   imageURL: string;
 }
 

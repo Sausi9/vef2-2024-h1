@@ -1,7 +1,7 @@
 import { readFile } from "fs/promises";
-import { poolEnd, query } from "./lib/db.js";
+import { getDatabase } from "./lib/db.js";
 import { environment } from './lib/environment.js';
-
+import { ILogger, logger as loggerSingleton } from './lib/logger.js';
 const SCHEMA_FILE = "./sql/schema.sql";
 const DROP_SCHEMA_FILE = "./sql/drop.sql";
 const INSERT_FILE = './sql/insert.sql';
@@ -9,17 +9,17 @@ const INSERT_FILE = './sql/insert.sql';
 export async function createSchema(schemaFile = SCHEMA_FILE) {
   const data = await readFile(schemaFile);
 
-  return query(data.toString("utf-8"));
+  return getDatabase()?.query(data.toString("utf-8"));
 }
 
 export async function dropSchema(dropFile = DROP_SCHEMA_FILE) {
   const data = await readFile(dropFile);
 
-  return query(data.toString("utf-8"));
+  return getDatabase()?.query(data.toString("utf-8"));
 }
 
 async function create() {
-  const env = environment(process.env);
+  const env = environment(process.env,loggerSingleton);
   if(!env){
     process.exit(1);
   }
@@ -41,7 +41,7 @@ async function create() {
   }
 
   const data = await readFile(INSERT_FILE);
-  const insert = await query(data.toString("utf-8"));
+  const insert = await getDatabase()?.query(data.toString("utf-8"));
 
   if (insert) {
     console.info("data inserted");
@@ -49,7 +49,7 @@ async function create() {
     console.info("data not inserted");
   }
 
-  await poolEnd();
+  await getDatabase()?.close();
 }
 
 create().catch((err) => {

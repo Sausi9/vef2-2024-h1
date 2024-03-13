@@ -4,7 +4,6 @@ import { listRegistrations, createRegistration, deleteRegistration } from '../li
 import { listEvents, getEvent, createEvent, deleteEvent  } from '../lib/events.js';
 import passport from 'passport';
 import bcrypt from 'bcrypt';
-import { getUserByUserName } from '../lib/db.js';
 import {users} from '../app.js';
 
 

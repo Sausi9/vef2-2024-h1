@@ -107,7 +107,7 @@ export class Database {
    * Get events from the database.
    */
   async getEvents() {
-    const q = 'SELECT id, title, place, description, imageURL FROM events';
+    const q = 'SELECT id, title, place, date, imageURL FROM events';
     const result = await this.query(q);
 
     const events: Array<DatabaseEvent> = [];
@@ -117,7 +117,7 @@ export class Database {
           id: row.id,
           title: row.title,
           place: row.place,
-          description: row.description,
+          date: row.date,
           imageURL: row.image
         };
         events.push(event);
@@ -130,7 +130,7 @@ export class Database {
   }
 
   async getEvent(id: string): Promise<DatabaseEvent | null> {
-    const q = 'SELECT title, place, description, imageURL FROM events WHERE $id = $1';
+    const q = 'SELECT title, place, date, imageURL FROM events WHERE $id = $1';
     const result = await this.query(q, [id]);
 
     if (result && result.rows.length === 1) {
@@ -139,7 +139,7 @@ export class Database {
         id: id,
         title: row.title,
         place: row.place,
-        description: row.description,
+        date: row.date,
         imageURL: row.image
       };
       return event;
@@ -225,15 +225,15 @@ export class Database {
   async insertEvent(event: Omit<DatabaseEvent,'id'>
   ): Promise<DatabaseEvent | null> {
     const result = await this.query(
-      'INSERT INTO events (title, place, description, imageURL) VALUES ($1, $2, $3, $4) ON CONFLICT DO NOTHING RETURNING id, title, place, description,imageURL',
-      [event.title, event.place, event.description, event.imageURL],
+      'INSERT INTO events (title, place, date, imageURL) VALUES ($1, $2, $3, $4) ON CONFLICT DO NOTHING RETURNING id, title, place, description,imageURL',
+      [event.title, event.place, event.date, event.imageURL],
     );
     if (result) {
       const resultTeam: DatabaseEvent = {
         id: result.rows[0].id,
         title: result.rows[0].title,
         place: result.rows[0].place,
-        description: result.rows[0].description,
+        date: result.rows[0].date,
         imageURL: result.rows[0].imageURL
       };
       return resultTeam;
@@ -278,10 +278,6 @@ export class Database {
     }
     return true;
   }
-
-
-
-
 
 
   async getUserByUserName(

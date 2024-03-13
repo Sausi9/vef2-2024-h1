@@ -29,12 +29,12 @@ export async function getEvent(req: Request, res: Response) {
 }
 
 export async function createEventHandler(req: Request, res: Response) {
-  const { title, place, description, imageURL } = req.body;
+  const { title, place, date, imageURL } = req.body;
 
   const createdEvent = await getDatabase()?.insertEvent({
     title: title,
     place: place,
-    description: description,
+    date: date,
     imageURL: imageURL,
   });
 
