@@ -246,16 +246,11 @@ export class Database {
   
 
 
-  async insertEvent(
-    id: string,
-    title: string,
-    place: string,
-    description: string,
-    imageURL: string
+  async insertEvent(event: Omit<DatabaseEvent,'id'>
   ): Promise<DatabaseEvent | null> {
     const result = await this.query(
-      'INSERT INTO events (id, title, place, description, imageURL) VALUES ($1, $2, $3, $4, $5) ON CONFLICT DO NOTHING RETURNING id, title, place, description,imageURL',
-      [id, title, place, description, imageURL],
+      'INSERT INTO events (title, place, description, imageURL) VALUES ($1, $2, $3, $4) ON CONFLICT DO NOTHING RETURNING id, title, place, description,imageURL',
+      [event.title, event.place, event.description, event.imageURL],
     );
     if (result) {
       const resultTeam: DatabaseEvent = {
@@ -267,6 +262,7 @@ export class Database {
       };
       return resultTeam;
     }
+    this.logger.warn('unable to insert game', { result, event });
     return null;
   }
 

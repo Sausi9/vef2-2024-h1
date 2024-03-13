@@ -18,44 +18,42 @@ export async function listEvents(req: Request, res: Response) {
   return res.json(events);
 }
 
-export async function getGame(req: Request, res: Response) {
-  const game = await getDatabase()?.getGame(req.params.id);
+export async function getEvent(req: Request, res: Response) {
+  const event = await getDatabase()?.getEvent(req.params.id);
 
-  if (!game) {
-    return res.status(404).json({ error: 'game not found' });
+  if (!event) {
+    return res.status(404).json({ error: 'event not found' });
   }
 
-  return res.json(game);
+  return res.json(event);
 }
 
-export async function createGameHandler(req: Request, res: Response) {
-  const { home, away, home_score, away_score, date } = req.body;
+export async function createEventHandler(req: Request, res: Response) {
+  const { title, place, description, imageURL } = req.body;
 
-  const createdGame = await getDatabase()?.insertGame({
-    home_id: home,
-    away_id: away,
-    home_score,
-    away_score,
-    date,
+  const createdEvent = await getDatabase()?.insertEvent({
+    title: title,
+    place: place,
+    description: description,
+    imageURL: imageURL,
   });
 
-  if (!createdGame) {
+  if (!createdEvent) {
     return res.status(500).json({ error: 'could not create game' });
   }
 
-  return res.status(201).json(createdGame);
+  return res.status(201).json(createdEvent);
 }
 
-export const createGame = [
-  ...createGameValidationMiddleware(),
-  ...xssSanitizationMiddleware(),
-  validationCheck,
-  ...sanitizationMiddleware(),
-  createGameHandler,
+export const createEvent = [
+  atLeastOneBodyValueValidator(['title', 'place', 'description', 'imageURL']),
+  genericSanitizerMany,
+  xssSanitizerMany,
+  createEventHandler,
 ];
 
-export async function deleteGame(req: Request, res: Response) {
-  const deletedGame = await getDatabase()?.deleteGame(req.params.id);
+export async function deleteEvent(req: Request, res: Response) {
+  const deletedGame = await getDatabase()?.deleteEvent(req.params.id);
 
   if (!deletedGame) {
     return res.status(500).json({ error: 'could not delete game' });
