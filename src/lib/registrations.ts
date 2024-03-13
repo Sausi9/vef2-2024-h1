@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { getDatabase} from './db.js';
-import { stringValidator, teamDoesNotExistValidator, xssSanitizer,validationCheck,genericSanitizer, atLeastOneBodyValueValidator} from './validation.js';
+import { stringValidator, registrationDoesNotExistValidator, xssSanitizer,validationCheck,genericSanitizer, atLeastOneBodyValueValidator} from './validation.js';
 import slugify from 'slugify';
 
 import { Registration } from '../types.js';
@@ -25,10 +25,14 @@ export async function createRegistrationHandler(
     next: NextFunction,
   ) {
     const id  = req.body.id;
+    const username = req.body.username;
+    const eventTitle = req.body.eventTitle;
     const user_id = req.body.userId;
     const event_id = req.body.eventId;
   
     const registrationToCreate: Omit<Registration, 'id'> = {
+      username: username,
+      eventTitle: eventTitle,
       userId: user_id,
       eventId: event_id
     };
@@ -49,7 +53,7 @@ export const createRegistration = [
       valueRequired: false,
       maxLength: 1000,
     }),
-    teamDoesNotExistValidator,
+    registrationDoesNotExistValidator,
     xssSanitizer('name'),
     xssSanitizer('description'),
     validationCheck,
@@ -63,20 +67,28 @@ export const createRegistration = [
     res: Response,
     next: NextFunction,
   ) {
-    const { id } = req.params;
+    const { id } = req.params; // Assuming 'id' is the parameter in your route for registration ID
+  
+    // Assuming getRegistrationById is a function that retrieves a registration by its ID
     const registration = await getDatabase()?.getRegistration(id);
   
     if (!registration) {
-      return next();
+      // If the registration does not exist, send a 404 Not Found response
+      return res.status(404).json({ error: "Registration not found" });
     }
   
-    const result = await deleteTeamBySlug(slug);
+    // Assuming deleteRegistrationById is a function that deletes a registration by its ID
+    const result = await getDatabase()?.deleteRegistration(id);
   
     if (!result) {
-      return next(new Error('unable to delete department'));
+      // If deletion was unsuccessful, handle the error (e.g., log it) and send a 500 Internal Server Error response
+      console.error(`Failed to delete registration with ID ${id}`);
+      return next(new Error('Unable to delete registration'));
     }
   
-    return res.status(204).json({});
+    // If deletion was successful, send a 204 No Content response to indicate success without returning any content
+    return res.status(204).end();
   }
+  
 
 
