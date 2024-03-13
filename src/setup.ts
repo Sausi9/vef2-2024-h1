@@ -1,6 +1,6 @@
 import { readFile } from "fs/promises";
 import { getDatabase, Database } from "./lib/db.js";
-import { getFile } from './lib/makeData.js';
+import { getFile } from './lib/file.js';
 import { DatabaseEvent } from './types.js';
 
 const SCHEMA_FILE = "./sql/schema.sql";
@@ -58,10 +58,14 @@ async function create() {
                 imageURL: data.event_image
             };
             const insertedEvent = await db.insertEvent(eventToBeInserted);
-            console.log(insertedEvent);
         }
     }
-
+    const users = ['Audunn','Dagur','Egill','osk7','someGuy'];
+    for(let i = 1; i <= 5; i++){
+        const event = await db.getEvent(i.toString());
+        const regInserted = await db.insertRegistration(users[i],event.title);
+        console.log(regInserted);
+    }
     await db.close();
 }
 
