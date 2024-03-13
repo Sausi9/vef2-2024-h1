@@ -39,7 +39,7 @@ export async function createEventHandler(req: Request, res: Response) {
   });
 
   if (!createdEvent) {
-    return res.status(500).json({ error: 'could not create game' });
+    return res.status(500).json({ error: 'could not create event' });
   }
 
   return res.status(201).json(createdEvent);

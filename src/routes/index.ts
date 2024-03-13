@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 export const indexRouter = express.Router();
-import { getTeam, listTeams, createTeam, updateTeam, deleteTeam  } from '../lib/registrations.js';
-import { listGames, createGame, getGame, updateGame  } from '../lib/events.js';
+import { listRegistrations, createRegistration, deleteRegistration } from '../lib/registrations.js';
+import { listEvents, getEvent, createEvent, deleteEvent  } from '../lib/events.js';
 import passport from 'passport';
 import bcrypt from 'bcrypt';
 import { getUserByUserName } from '../lib/db.js';
@@ -43,14 +43,17 @@ export async function indexRoute(req: Request, res: Response) {
 }
 
 indexRouter.get('/', indexRoute);
-indexRouter.get('/teams', listTeams);
+indexRouter.get('/events', listEvents);
 
 
-indexRouter.get('/teams/:slug', getTeam);
+indexRouter.get('/events/:id', getEvent);
+indexRouter.post('/events', createEvent);
+indexRouter.delete('/events/:id', deleteEvent);
 
 
-indexRouter.get('/games', listGames);
-indexRouter.get('/games/:gameId', getGame);
+indexRouter.get('/registrations', listRegistrations);
+indexRouter.post('/registrations', createRegistration);
+indexRouter.delete('/registrations/:id', deleteRegistration);
 
 
 

@@ -58,91 +58,15 @@ export const createRegistration = [
     createRegistrationHandler,
   ];
 
-
-export async function getTeam(req: Request,
-    res: Response,
-    next: NextFunction,
-)
-{
-    const { slug } = req.params;
-
-    const team = await getTeamBySlug(slug);
-
-    if (!team) {
-        return next();
-    }
-
-    return res.json(team);
-    
-}
-
-
-export const updateTeam = [
-    stringValidator({ field: 'name', maxLength: 64, optional: true }),
-    stringValidator({
-      field: 'description',
-      valueRequired: false,
-      maxLength: 1000,
-      optional: true,
-    }),
-    atLeastOneBodyValueValidator(['name', 'description']),
-    xssSanitizer('name'),
-    xssSanitizer('description'),
-    validationCheck,
-    updateTeamHandler,
-  ];
-  
-  export async function updateTeamHandler(
+  export async function deleteRegistration(
     req: Request,
     res: Response,
     next: NextFunction,
   ) {
-    const { slug } = req.params;
-    const team= await getTeamBySlug(slug);
+    const { id } = req.params;
+    const registration = await getDatabase()?.getRegistration(id);
   
-    if (!team) {
-      return next();
-    }
-    
-  
-    const {name, description} = req.body;
-  
-    const fields = [
-      typeof name === 'string' && name ? 'name' : null,
-      typeof name === 'string' && name ? 'slug' : null,
-      typeof description === 'string' && description ? 'description' : null,
-    ];
-  
-    const values = [
-      typeof name === 'string' && name ? name : null,
-      typeof name === 'string' && name? slugify(name).toLowerCase() : null,
-      typeof description === 'string' && description ? description : null,
-    ];
-  
-    const updated = await conditionalUpdate(
-      'teams',
-      team.id,
-      fields,
-      values,
-    );
-  
-    if (!updated) {
-      return next(new Error('unable to update department'));
-    }
-  
-    const updatedDepartment = TeamMapper(updated.rows[0]);
-    return res.json(updatedDepartment);
-  }
-
-  export async function deleteTeam(
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ) {
-    const { slug } = req.params;
-    const department = await getTeamBySlug(slug);
-  
-    if (!department) {
+    if (!registration) {
       return next();
     }
   
