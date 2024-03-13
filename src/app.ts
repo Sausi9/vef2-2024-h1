@@ -23,9 +23,6 @@ export const users: Array<USER> = []
 initialize(passport, getUserByUserName, getUserByUserId);
 
 
-
-
-
 const env = environment(process.env, logger);
 
 if (!env) {
@@ -60,8 +57,6 @@ app.use(passport.session())
 
 
 app.use(cors);
-
-
 
 
 
@@ -118,23 +113,6 @@ export function checkNotAuthenticated(req,res, next){
   }
   next()
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}/`);

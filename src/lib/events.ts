@@ -5,15 +5,15 @@ import {
   getGameByGameId,
   insertGame,
   getGames,
-} from '../lib/db.js';
-import { GameMapper } from '../lib/mappers.js';
+} from './db.js';
+import { GameMapper } from './mappers.js';
 import {
   atLeastOneBodyValueValidator,
   genericSanitizerMany,
   stringValidator,
   validationCheck,
   xssSanitizerMany,
-} from '../lib/validation.js';
+} from './validation.js';
 import { Game } from '../types.js';
 
 
