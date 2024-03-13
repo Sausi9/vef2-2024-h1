@@ -1,3 +1,6 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 const DEFAULT_PORT = 3000;
 
 /**
@@ -13,10 +16,9 @@ let parsedEnv = null;
  * Validate the environment variables and return them as an object or `null` if
  * validation fails.
  * @param {NodeJS.ProcessEnv} env
- * @param {import('./logger').Logger} logger
  * @returns {Environment | null}
  */
-export function environment(env, logger) {
+export function environment(env) {
   // If we've already parsed the environment, return the cached value
   // i.e. this is singleton and can be called multiple times in different files
   if (parsedEnv) {
@@ -32,27 +34,27 @@ export function environment(env, logger) {
   let error = false;
 
   if (!envSessionSecret || envSessionSecret.length < 32) {
-    logger.error(
+    console.error(
       'SESSION_SECRET must be defined as string and be at least 32 characters long',
     );
     error = true;
   }
 
   if (!envConnectionString || envConnectionString.length === 0) {
-    logger.error('DATABASE_URL must be defined as a string');
+    console.error('DATABASE_URL must be defined as a string');
     error = true;
   }
 
   let usedPort;
   const parsedPort = Number.parseInt(port ?? '', 10);
   if (port && Number.isNaN(parsedPort)) {
-    logger.error('PORT must be defined as a number', port);
+    console.error('PORT must be defined as a number', port);
     usedPort = parsedPort;
     error = true;
   } else if (parsedPort) {
     usedPort = parsedPort;
   } else {
-    logger.info('PORT not defined, using default port', DEFAULT_PORT);
+    console.info('PORT not defined, using default port', DEFAULT_PORT);
     usedPort = DEFAULT_PORT;
   }
 
