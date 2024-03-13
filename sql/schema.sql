@@ -1,6 +1,6 @@
 CREATE TABLE public.events (
   id SERIAL PRIMARY KEY,
-  title VARCHAR(100) NOT NULL UNIQUE,
+  title VARCHAR(300) NOT NULL UNIQUE,
   place VARCHAR(200) NOT NULL,
   event_image VARCHAR(300) NOT NULL,
   date TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -15,7 +15,7 @@ CREATE TABLE public.users (
 
 CREATE TABLE public.registrations (
   id SERIAL PRIMARY KEY,
-  event_title VARCHAR(100) NOT NULL REFERENCES events(title),
+  event_title VARCHAR(300) NOT NULL REFERENCES events(title),
   username VARCHAR(64) NOT NULL REFERENCES users(name),
   user_id integer,
   event_id integer,

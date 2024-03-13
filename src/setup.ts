@@ -1,29 +1,28 @@
 import { readFile } from "fs/promises";
-import { getDatabase } from "./lib/db.js";
-import { environment } from './lib/environment.js';
-import { ILogger, logger as loggerSingleton } from './lib/logger.js';
+import { getDatabase, Database } from "./lib/db.js";
+import { getFile } from './lib/makeData.js';
+import { DatabaseEvent } from './types.js';
+
 const SCHEMA_FILE = "./sql/schema.sql";
 const DROP_SCHEMA_FILE = "./sql/drop.sql";
 const INSERT_FILE = './sql/insert.sql';
 
-export async function createSchema(schemaFile = SCHEMA_FILE) {
+export async function createSchema(db : Database, schemaFile = SCHEMA_FILE) {
   const data = await readFile(schemaFile);
 
-  return getDatabase()?.query(data.toString("utf-8"));
+  return db.query(data.toString("utf-8"));
 }
 
-export async function dropSchema(dropFile = DROP_SCHEMA_FILE) {
+export async function dropSchema(db: Database, dropFile = DROP_SCHEMA_FILE) {
   const data = await readFile(dropFile);
 
-  return getDatabase()?.query(data.toString("utf-8"));
+  return db.query(data.toString("utf-8"));
 }
 
 async function create() { 
-    const env = environment(process.env,loggerSingleton);
-    if(!env){
-        process.exit(1);
-    }
-    const drop = await dropSchema();
+    const db = getDatabase();
+
+    const drop = await dropSchema(db);
 
     if (drop) {
         console.info("schema dropped");
@@ -32,7 +31,7 @@ async function create() {
         process.exit(-1);
     }
 
-    const result = await createSchema();
+    const result = await createSchema(db);
 
     if (result) {
         console.info("schema created");
@@ -41,15 +40,29 @@ async function create() {
     }
 
     const data = await readFile(INSERT_FILE);
-    const insert = await getDatabase()?.query(data.toString("utf-8"));
+    const insert = await db.query(data.toString("utf-8"));
 
     if (insert) {
         console.info("data inserted");
     } else {
         console.info("data not inserted");
     }
+    const dataString = await getFile('./data/eventData.json');
+    if(dataString){
+        const dataJson = JSON.parse(dataString);
+        for(const data of dataJson){
+            const eventToBeInserted : Omit<DatabaseEvent,'id'> = {
+                title: data.title,
+                place: data.place,
+                date: data.date,
+                imageURL: data.event_image
+            };
+            const insertedEvent = await db.insertEvent(eventToBeInserted);
+            console.log(insertedEvent);
+        }
+    }
 
-    await getDatabase()?.close();
+    await db.close();
 }
 
 create().catch((err) => {
