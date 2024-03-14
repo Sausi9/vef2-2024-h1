@@ -47,7 +47,7 @@ adminRouter.post('/events' ,requireAdmin ,createEvent);
 adminRouter.patch('/events/:id',  requireAdmin,updateEvent);
 adminRouter.delete('/events/:id', requireAdmin, deleteEvent);
 
-adminRouter.get('/registrations', requireAdmin,listRegistrations);
+adminRouter.get('/registrations',listRegistrations);
 adminRouter.post('/registrations', requireAdmin, createRegistration);
 adminRouter.delete('/registrations/:id', requireAdmin,deleteRegistration);
 

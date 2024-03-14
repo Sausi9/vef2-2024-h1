@@ -25,8 +25,8 @@ export async function createRegistrationHandler(
     next: NextFunction,
   ) {
     const id  = req.body.id;
-    const username = req.body.username;
     const eventTitle = req.body.eventTitle;
+    const username = req.body.username;
     const user_id = req.body.user_id;
     const event_id = req.body.eventId;
   
