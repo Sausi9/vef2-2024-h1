@@ -3,19 +3,8 @@
  * þetta var keyrt einu sinni til þess að mynda json gögnin sem verða notuð.
  */
 
-import { readFile as fsReadFile, writeFile } from 'fs/promises';
-
-
-//Þetta fall er hins vegar notað í setup.ts
-export async function getFile(filepath : string) : Promise<string> | null{
-    try {
-        const content = await fsReadFile(filepath,'utf8');
-        return content.toString();
-    } catch (e) {
-        console.error('gat ekki lesið skránna: ', e);
-        return null;
-    }
-}
+import { writeFile } from 'fs/promises';
+import { getFile } from './file.js';
 
 async function writeNewData(data : Array<any>){
     const outpath = './data/eventData.json';
