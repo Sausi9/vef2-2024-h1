@@ -1,6 +1,6 @@
 import express from 'express';
 export const adminRouter = express.Router();
-import { listRegistrations, createRegistration,  deleteRegistration  } from '../lib/registrations.js';
+import { listRegistrations, createRegistration,  deleteRegistration, getRegistration } from '../lib/registrations.js';
 import { listEvents, createEvent, getEvent, deleteEvent , updateEvent } from '../lib/events.js';
 import { checkAuthenticated, checkNotAuthenticated } from '../app.js';
 import { logger } from '../lib/logger.js';
@@ -48,8 +48,9 @@ adminRouter.patch('/events/:id',  requireAdmin,updateEvent);
 adminRouter.delete('/events/:id', requireAdmin, deleteEvent);
 
 adminRouter.get('/registrations',listRegistrations);
+adminRouter.get('/registrations/:id',getRegistration);
 adminRouter.post('/registrations', requireAdmin, createRegistration);
-adminRouter.delete('/registrations/:id', requireAdmin,deleteRegistration);
+adminRouter.delete('/registrations/:id',deleteRegistration);
 
 adminRouter.get('/users', requireAdmin,listUsers);
 adminRouter.post('/users',  requireAdmin, createUser);
