@@ -71,6 +71,8 @@ app.use(cors);
 
 app.use(apiRouter);
 app.use(adminRouter);
+app.use(indexRouter);
+
 
 
 

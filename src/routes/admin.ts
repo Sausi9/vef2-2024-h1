@@ -51,7 +51,7 @@ adminRouter.get('/registrations', requireAdmin,listRegistrations);
 adminRouter.post('/registrations', requireAdmin, createRegistration);
 adminRouter.delete('/registrations/:id', requireAdmin,deleteRegistration);
 
-adminRouter.get('/users',  requireAdmin,listUsers);
+adminRouter.get('/users', requireAdmin,listUsers);
 adminRouter.post('/users',  requireAdmin, createUser);
 adminRouter.delete('/users/:id',  requireAdmin ,deleteUser);
 

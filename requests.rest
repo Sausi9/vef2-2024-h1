@@ -73,9 +73,6 @@ Content-Type: application/json
 ####
 GET http://localhost:3000/admin
 
-####
-GET http://localhost:3001/
-
 
 ####
 GET http://localhost:3000/users
