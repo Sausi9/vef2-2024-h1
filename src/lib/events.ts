@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Request, Response , NextFunction} from 'express';
 import { getDatabase } from '../lib/db.js';
 import {
   atLeastOneBodyValueValidator,
@@ -6,7 +6,11 @@ import {
   stringValidator,
   validationCheck,
   xssSanitizerMany,
+  xssSanitizer,
 } from './validation.js';
+import { EventMapper } from './mappers.js';
+
+const db = getDatabase();
 
 export async function listEvents(req: Request, res: Response) {
   const events = await getDatabase()?.getEvents();
@@ -19,6 +23,7 @@ export async function listEvents(req: Request, res: Response) {
 }
 
 export async function getEvent(req: Request, res: Response) {
+
   const event = await getDatabase()?.getEvent(req.params.id);
 
   if (!event) {
@@ -60,4 +65,61 @@ export async function deleteEvent(req: Request, res: Response) {
   }
 
   return res.status(204).json({});
+}
+
+
+
+export const updateEvent = [
+  stringValidator({ field: 'title', maxLength: 300, optional: true }),
+  stringValidator({
+    field: 'place',
+    valueRequired: false,
+    maxLength: 200,
+    optional: true,
+  }),
+  atLeastOneBodyValueValidator(['title', 'place']),
+  xssSanitizer('title'),
+  xssSanitizer('place'),
+  validationCheck,
+  updateEventHandler,
+];
+
+export async function updateEventHandler(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  const { id } = req.params;
+  const event = await db.getEvent(id);
+
+  if (!event) {
+    return next();
+  }
+  
+
+  const {title, place} = req.body;
+
+  const fields = [
+    typeof title === 'string' && title ? 'title' : null,
+    typeof place === 'string' && place ? 'place' : null,
+  ];
+
+  const values = [
+    typeof title === 'string' && title ? title : null,
+    typeof place === 'string' && place ? place : null,
+  ];
+
+  const updated = await db.conditionalUpdate(
+    'events',
+    event.id,
+    fields,
+    values,
+  );
+
+  if (!updated) {
+    return next(new Error('unable to update event'));
+  }
+
+  const updatedEvent = EventMapper(updated.rows[0]);
+  return res.json(updatedEvent);
 }

@@ -1,31 +1,22 @@
-POST http://localhost:3001/register
+POST http://localhost:3000/register
 Content-Type: application/json
 
 {
-    "name": "Egill",
-    "password": "a"
-
-}
-
-####
-
-POST http://localhost:3001/login
-Content-Type: application/json
-
-{
-    "name": "Egill",
+    "username": "admin2",
     "password": "123"
 
+
 }
+
 
 
 ####
 
-POST http://localhost:3001/login
+POST http://localhost:3000/login
 Content-Type: application/json
 
 {
-    "name": "admin",
+    "username": "admin",
     "password": "123"
 
 }
@@ -45,11 +36,14 @@ Content-Type: application/json
 
 
 ####
-GET http://localhost:3001/teams/teamegill
+GET http://localhost:3001/events/teamegill
 
 
 ####
-GET http://localhost:3001/teams
+GET http://localhost:3000/events
+
+####
+GET http://localhost:3000/2
 
 
 
@@ -77,10 +71,38 @@ Content-Type: application/json
 
 
 ####
-GET http://localhost:3001/admin
+GET http://localhost:3000/admin
 
 ####
 GET http://localhost:3001/
 
 
+####
+GET http://localhost:3000/users
+
+
+####
+POST  http://localhost:3000/users
+
+
+
+####
+
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+    "username": "admin",
+    "password": "123"
+
+}
+
+
+####
+GET http://localhost:3000/users
+Authorization: Bearer
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzEwNDM0NjE2LCJleHAiOjE3MTA0MzgyMTZ9.hq8CgaUKWxLlSUYpsD8aOfe6sOHmju-Q1w8_OsMbm54
+
+
+###
 

@@ -70,9 +70,25 @@ export function UserMapper(potentialUser: unknown): USER | null {
     id: user.id,
     name: user.name,
     password: user.password,
+    admin: user.admin
   };
 
   return mapped;
+}
+
+
+export function UsersMapper(potentialUsers: unknown): Array<USER> {
+  const users = potentialUsers as Array<unknown> | null;
+
+  if (!users || !Array.isArray(users)) {
+    return [];
+  }
+
+  
+
+  const mapped = users.map(UserMapper);
+
+  return mapped.filter((i): i is USER => Boolean(i));
 }
 
 // Add any additional mapper functions as needed for other types or specific use cases

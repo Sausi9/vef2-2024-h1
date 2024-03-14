@@ -6,6 +6,7 @@ import {
   DatabaseEventMapper,
   RegistrationMapper,
   UserMapper,
+  UsersMapper,
 } from './mappers.js';
 
 import { environment } from './environment.js';
@@ -107,7 +108,7 @@ export class Database {
    * Get events from the database.
    */
   async getEvents() {
-    const q = 'SELECT id, title, place, date, imageURL FROM events';
+    const q = 'SELECT id, title, place, date FROM events';
     const result = await this.query(q);
 
     const events: Array<DatabaseEvent> = [];
@@ -130,6 +131,7 @@ export class Database {
   }
 
   async getEvent(id: string): Promise<DatabaseEvent | null> {
+    
     const q = 'SELECT title, place, event_image, date FROM events WHERE id = $1';
     const result = await this.query(q, [id]);
 
@@ -179,7 +181,7 @@ export class Database {
 
 
   async getRegistration(id: string): Promise<Registration | null> {
-    const q = 'SELECT event_title, username, user_id, event_id FROM registrations WHERE $id = $1';
+    const q = 'SELECT eventTitle, username, userId, eventId FROM registrations WHERE $id = $1';
     const result = await this.query(q, [id]);
 
     if (result && result.rows.length === 1) {
@@ -188,8 +190,8 @@ export class Database {
         id: id,
         eventTitle: row.event_title,
         username: row.username,
-        userId: row.user_id,
-        eventId: row.event_id,
+        userId: row.userId,
+        eventId: row.place,
       };
       return registration;
     }
@@ -201,15 +203,19 @@ export class Database {
   async getRegistrations(limit = MAX_REGISTRATIONS): Promise<Registration[] | null> {
     const q = `
       SELECT
-        id,
-        username,
-        event_title,
-        user_id,
-        event_id
+        registrations.id AS registration_id,
+        users.id AS user_id,
+        users.name AS user_name,
+        events.id AS event_id,
+        events.title AS event_title
       FROM
         registrations
+      JOIN
+        users ON users.id = registrations.userId
+      JOIN
+        events ON events.id = registrations.eventId
       ORDER BY
-        id
+        registrations.id
       LIMIT $1
     `;
   
@@ -219,11 +225,11 @@ export class Database {
   
     if (result && result.rows && result.rows.length > 0) {
       const registrations: Registration[] = result.rows.map(row => ({
-        id: row.id.toString(), // Assuming IDs are integers in the database
-        username: row.username,
+        id: row.registration_id,
+        userId: row.user_id,
+        username: row.user_name,
+        eventId: row.event_id,
         eventTitle: row.event_title,
-        userId: row.user_id.toString(), // Convert to string if necessary
-        eventId: row.event_id.toString(), // Convert to string if necessary
       }));
   
       return registrations;
@@ -231,7 +237,6 @@ export class Database {
   
     return null;
   }
-  
   
   
 
@@ -299,9 +304,10 @@ export class Database {
   }
 
 
-  async getUserByUserName(
+ async getUserByUserName(
     userName: string,
   ): Promise<USER | null> {
+    
     const result = await this.query(`SELECT * FROM users WHERE name = $1`, [
       userName,
     ]);
@@ -330,6 +336,34 @@ export class Database {
   
     return user;
   }
+
+  async deleteUserByUsername(
+    username: string,
+  ): Promise<boolean> {
+    const result = await this.query('DELETE FROM users WHERE name = $1', [
+      username,
+    ]);
+  
+    if (!result) {
+      return false;
+    }
+  
+    return result.rowCount === 1;
+  }
+
+  async  getUsers(): Promise<Array<USER> | null> {
+    const result = await this.query('SELECT * FROM users');
+  
+    if (!result) {
+      return null;
+    }
+  
+    const users = UsersMapper(result.rows).map((d) => {
+      return d;
+    });
+  
+    return users;
+  }
   
   
   async insertUser(
@@ -345,6 +379,47 @@ export class Database {
   
     return mapped;
   }
+
+
+
+  async  conditionalUpdate(
+    table: 'events' | 'registrations',
+    id: string | number,
+    fields: Array<string | null>,
+    values: Array<string | number | null>,
+  ) {
+    const filteredFields = fields.filter((i) => typeof i === 'string');
+    const filteredValues = values.filter(
+      (i): i is string | number => typeof i === 'string' || typeof i === 'number',
+    );
+  
+    if (filteredFields.length === 0) {
+      return false;
+    }
+  
+    if (filteredFields.length !== filteredValues.length) {
+      throw new Error('fields and values must be of equal length');
+    }
+  
+    // id is field = 1
+    const updates = filteredFields.map((field, i) => `${field} = $${i + 2}`);
+  
+    const q = `
+      UPDATE ${table}
+        SET ${updates.join(', ')}
+      WHERE
+        id = $1
+      RETURNING *
+      `;
+  
+    const queryValues: Array<string | number> = (
+      [id] as Array<string | number>
+    ).concat(filteredValues);
+    const result = await this.query(q, queryValues);
+  
+    return result;
+  }
+  
 
 }
 let db: Database | null = null;
@@ -368,5 +443,26 @@ export function getDatabase() {
   return db;
 }
 
+
+export async function query(
+  query: string,
+  values: Array<string | number> = [],
+): Promise<pg.QueryResult | null> {
+  const client = await this.connect();
+
+  if (!client) {
+    return null;
+  }
+
+  try {
+    const result = await client.query(query, values);
+    return result;
+  } catch (e) {
+    this.logger.error('Error running query', e);
+    return null;
+  } finally {
+    client.release();
+  }
+}
 
 
