@@ -15,8 +15,8 @@ export type DatabaseEvent = {
 
 export type Registration = {
   id: string;
-  username: string;
   eventTitle: string;
+  username: string;
   userId: number;
   eventId: number;
 }

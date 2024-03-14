@@ -1,39 +1,51 @@
-import express from 'express';
-export const adminRouter = express.Router();
-import { getTeam, listTeams, createTeam, updateTeam, deleteTeam  } from '../lib/registrations.js';
-import { listGames, createGame, getGame, updateGame  } from '../lib/events.js';
+import express, { Request, Response } from 'express';
+import { listRegistrations, createRegistration, deleteRegistration } from '../lib/registrations.js';
+import { listEvents, getEvent, createEvent, deleteEvent  } from '../lib/events.js';
 import { checkAuthenticated, checkNotAuthenticated } from '../app.js';
 import { logger } from '../lib/logger.js';
 
+export const adminRouter = express.Router();
 
 
-export async function indexRoute(req, res) {
-    return res.json([
-        {
-          href: '/teams',
-          methods: ['GET', 'POST'],
-        },
-        {
-          href: '/teams/:slug',
-          methods: ['GET', 'PATCH', 'DELETE'],
-        },
-        {
-          href: '/games',
-          methods: ['GET', 'POST', 'PATCH'],
-        },
-      ]);
+export async function indexRoute(req: Request, res: Response) {
+  return res.json([
+      {
+        href: '/events',
+        methods: ['GET','POST'],
+      },
+      {
+        href: '/events/:id',
+        methods: ['GET','PATCH','DELETE'],
+      },
+      {
+        href: '/registrations',
+        methods: ['GET','POST'],
+      },
+      {
+        href: '/registrations/:id',
+        methods: ['DELETE'],
+      },
+      {
+        href: '/users',
+        methods: ['GET','POST'],
+      },
+      {
+        href: '/users/:id',
+        methods: ['DELETE'],
+      },
+    ]);
 
-   
 }
 
+adminRouter.get('/', indexRoute);
+adminRouter.get('/events', listEvents);
 
 
-adminRouter.get('/admin', checkAuthenticated,indexRoute);
-adminRouter.post('/teams', checkAuthenticated ,createTeam);
+adminRouter.get('/events/:id', getEvent);
+adminRouter.post('/events', createEvent);
+adminRouter.delete('/events/:id', deleteEvent);
 
-adminRouter.patch('/teams/:slug', checkAuthenticated, updateTeam);
-adminRouter.delete('/teams/:slug', checkAuthenticated, deleteTeam);
 
-adminRouter.post('/games', checkAuthenticated, createGame);
-
-adminRouter.patch('/games/:gameid', checkAuthenticated,updateGame);
+adminRouter.get('/registrations', listRegistrations);
+adminRouter.post('/registrations', createRegistration);
+adminRouter.delete('/registrations/:id', deleteRegistration);

@@ -1,6 +1,6 @@
 import {Strategy} from 'passport-local';
 import bcrypt from 'bcrypt';
-import { getUserByUserName } from './lib/db';
+import { getDatabase } from './lib/db';
 
 
 export function initialize(passport, getUserByName, getUserById){

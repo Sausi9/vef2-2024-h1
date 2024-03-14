@@ -7,6 +7,7 @@ const DEFAULT_PORT = 3000;
 
 export type Environment = {
   port: number;
+  sessionSecret: string;
   connectionString: string;
 };
 
@@ -26,7 +27,7 @@ export function environment(
     return parsedEnv;
   }
 
-  const { PORT: port, DATABASE_URL: envConnectionString } = env;
+  const { PORT: port, SESSION_SECRET: sessionSecret, DATABASE_URL: envConnectionString } = env;
 
   let error = false;
 
@@ -57,6 +58,7 @@ export function environment(
 
   parsedEnv = {
     port: usedPort,
+    sessionSecret,
     connectionString,
   };
 
