@@ -1,5 +1,4 @@
 import express, { Request, Response } from 'express';
-export const indexRouter = express.Router();
 import { listRegistrations, createRegistration, deleteRegistration } from '../lib/registrations.js';
 import { listEvents, getEvent, createEvent, deleteEvent  } from '../lib/events.js';
 import passport from 'passport';
@@ -8,6 +7,7 @@ import {users} from '../app.js';
 
 
 
+export const indexRouter = express.Router();
 
 
 export async function indexRoute(req: Request, res: Response) {
@@ -38,7 +38,6 @@ export async function indexRoute(req: Request, res: Response) {
         },
       ]);
 
-   
 }
 
 indexRouter.get('/', indexRoute);

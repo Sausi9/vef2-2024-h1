@@ -179,17 +179,17 @@ export class Database {
 
 
   async getRegistration(id: string): Promise<Registration | null> {
-    const q = 'SELECT username, eventTitle, userId, eventId FROM registrations WHERE $id = $1';
+    const q = 'SELECT event_title, username, user_id, event_id FROM registrations WHERE $id = $1';
     const result = await this.query(q, [id]);
 
     if (result && result.rows.length === 1) {
       const row = result.rows[0];
       const registration: Registration = {
         id: id,
+        eventTitle: row.event_title,
         username: row.username,
-        eventTitle: row.eventTitle,
-        userId: row.userId,
-        eventId: row.place,
+        userId: row.user_id,
+        eventId: row.event_id,
       };
       return registration;
     }
@@ -201,19 +201,15 @@ export class Database {
   async getRegistrations(limit = MAX_REGISTRATIONS): Promise<Registration[] | null> {
     const q = `
       SELECT
-        registrations.id AS registration_id,
-        users.id AS user_id,
-        users.name AS user_name,
-        events.id AS event_id,
-        events.title AS event_title
+        id,
+        username,
+        event_title,
+        user_id,
+        event_id
       FROM
         registrations
-      JOIN
-        users ON users.id = registrations.userId
-      JOIN
-        events ON events.id = registrations.eventId
       ORDER BY
-        registrations.id
+        id
       LIMIT $1
     `;
   
@@ -223,11 +219,11 @@ export class Database {
   
     if (result && result.rows && result.rows.length > 0) {
       const registrations: Registration[] = result.rows.map(row => ({
-        id: row.registration_id,
-        userId: row.user_id,
-        username: row.user_name,
-        eventId: row.event_id,
+        id: row.id.toString(), // Assuming IDs are integers in the database
+        username: row.username,
         eventTitle: row.event_title,
+        userId: row.user_id.toString(), // Convert to string if necessary
+        eventId: row.event_id.toString(), // Convert to string if necessary
       }));
   
       return registrations;
@@ -235,6 +231,7 @@ export class Database {
   
     return null;
   }
+  
   
   
 

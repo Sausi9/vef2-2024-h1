@@ -13,14 +13,14 @@ import session from 'express-session';
 import { environment } from './lib/environment.js';
 import { logger } from './lib/logger.js';
 import methodOverride from 'method-override';
-import { getUserByUserId, getUserByUserName } from './lib/db.js';
+import { getDatabase } from './lib/db.js';
 import { adminRouter } from './routes/admin.js';
 
 dotenv.config();
 
 export const users: Array<USER> = []
-
-initialize(passport, getUserByUserName, getUserByUserId);
+const db = getDatabase();
+initialize(passport, db.getUserByUserName, db.getUserByUserId);
 
 
 const env = environment(process.env, logger);
@@ -85,7 +85,7 @@ app.get('/register', checkNotAuthenticated, (req, res) => {
 app.post('/register',  checkNotAuthenticated,async (req, res) => {
   try{
     const hashedPassword = await bcrypt.hash(req.body.password, 10)
-    const user = getUserByUserName(req.body.name);
+    const user = db.getUserByUserName(req.body.name);
     users.push({
       id: Date.now().toString(),
       name: req.body.name,

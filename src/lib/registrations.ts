@@ -27,17 +27,17 @@ export async function createRegistrationHandler(
     const id  = req.body.id;
     const username = req.body.username;
     const eventTitle = req.body.eventTitle;
-    const user_id = req.body.userId;
+    const user_id = req.body.user_id;
     const event_id = req.body.eventId;
   
     const registrationToCreate: Omit<Registration, 'id'> = {
-      username: username,
       eventTitle: eventTitle,
+      username: username,
       userId: user_id,
       eventId: event_id
     };
   
-    const createdRegistration= await getDatabase()?.insertRegistration(registrationToCreate);
+    const createdRegistration= await getDatabase()?.insertRegistration(username,eventTitle);
   
     if (!createdRegistration) {
       return next(new Error('unable to create registration'));
