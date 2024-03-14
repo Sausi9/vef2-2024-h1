@@ -181,7 +181,7 @@ export class Database {
 
 
   async getRegistration(id: string): Promise<Registration | null> {
-    const q = 'SELECT event_title, username, user_id, event_id FROM registrations WHERE $id = $1';
+    const q = 'SELECT event_title, username, user_id, event_id FROM registrations WHERE id = $1';
     const result = await this.query(q, [id]);
 
     if (result && result.rows.length === 1) {
