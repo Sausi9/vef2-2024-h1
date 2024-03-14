@@ -26,6 +26,7 @@ export type USER = {
   id: string;
   name: string;
   password: string;
+  admin: boolean;
 
 };
   
