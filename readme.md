@@ -18,7 +18,7 @@ POST {baseURL}/register - býr til notenda aðgang.
 t.d. {"username":"nafn", "password": "lykilorð"}
 
 Innskráning: 
-POST {baseURL}/login - skráir notanda inn og gefur honumm access token.
+POST {baseURL}/login - skráir notanda inn og gefur honum access token.
 
 t.d. {"username":"nafn", "password": "lykilorð"}
 
