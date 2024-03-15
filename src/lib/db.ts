@@ -108,7 +108,7 @@ export class Database {
    * Get events from the database.
    */
   async getEvents() {
-    const q = 'SELECT id, title, place, date FROM events';
+    const q = 'SELECT title, place, event_image, date FROM events';
     const result = await this.query(q);
 
     const events: Array<DatabaseEvent> = [];
@@ -119,7 +119,7 @@ export class Database {
           title: row.title,
           place: row.place,
           date: row.date,
-          imageURL: row.image
+          imageURL: row.event_image
         };
         events.push(event);
       }

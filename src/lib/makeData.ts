@@ -6,9 +6,9 @@ import { writeFile } from "fs/promises";
 import { getFile, readFilesFromDir } from "./file.js";
 import { environment, Environment } from "./environment.js";
 import { makeCloudinaryConfig, uploadImage } from "./cloudinary.js";
-import { Logger } from "./logger.js";
+import { logger as loggerSingleton } from './logger.js';
 
-const env : Environment = environment(process.env, new Logger(true));
+const env : Environment = environment(process.env, loggerSingleton);
 
 makeCloudinaryConfig(env);
 
@@ -34,16 +34,8 @@ async function makeData() {
   console.log(images);
   let imgInx = 0;
   for (const event of dataJson) {
-    let image: string;
-    try {
-      const uploadRes = await uploadImage(images[imgInx]);
-      if (!uploadRes || !uploadRes.secure_url) {
-        throw new Error("no secure_url from cloudinary upload");
-      }
-      image = uploadRes.secure_url;
-    } catch (e) {
-      console.error("Unable to upload file to cloudinary", e);
-    }
+    const image = await uploadImage(images[imgInx]);
+    imgInx++;
     const eventData = {
       id: event.id,
       title: event.language.is.title,

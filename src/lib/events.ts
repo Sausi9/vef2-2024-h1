@@ -9,11 +9,19 @@ import {
   xssSanitizer,
 } from './validation.js';
 import { EventMapper } from './mappers.js';
+import { Environment, environment } from './environment.js';
+import { logger as loggerSingleton } from './logger.js';
+import { makeCloudinaryConfig, uploadImage, deleteImage } from './cloudinary.js';
+
+
+const env : Environment = environment(process.env, loggerSingleton);
+
+makeCloudinaryConfig(env);
 
 const db = getDatabase();
 
 export async function listEvents(req: Request, res: Response) {
-  const events = await getDatabase()?.getEvents();
+  const events = await db.getEvents();
 
   if (!events) {
     return res.status(500).json({ error: 'could not get events' });
@@ -24,7 +32,7 @@ export async function listEvents(req: Request, res: Response) {
 
 export async function getEvent(req: Request, res: Response) {
 
-  const event = await getDatabase()?.getEvent(req.params.id);
+  const event = await db.getEvent(req.params.id);
 
   if (!event) {
     return res.status(404).json({ error: 'event not found' });
@@ -35,12 +43,12 @@ export async function getEvent(req: Request, res: Response) {
 
 export async function createEventHandler(req: Request, res: Response) {
   const { title, place, date, imageURL } = req.body;
-
-  const createdEvent = await getDatabase()?.insertEvent({
+  const image = await uploadImage(imageURL);
+  const createdEvent = await db.insertEvent({
     title: title,
     place: place,
     date: date,
-    imageURL: imageURL,
+    imageURL: image,
   });
 
   if (!createdEvent) {
@@ -58,7 +66,9 @@ export const createEvent = [
 ];
 
 export async function deleteEvent(req: Request, res: Response) {
-  const deletedGame = await getDatabase()?.deleteEvent(req.params.id);
+  const eventToBeDeleted = await db.getEvent(req.params.id);
+  await deleteImage(eventToBeDeleted.imageURL);
+  const deletedGame = await db.deleteEvent(req.params.id);
 
   if (!deletedGame) {
     return res.status(500).json({ error: 'could not delete game' });
