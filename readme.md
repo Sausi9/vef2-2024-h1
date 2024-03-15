@@ -22,11 +22,17 @@ POST {baseURL}/login - skráir notanda inn og gefur honumm access token.
 Admin only: 
 
 GET {baseURL}/admin - birtir upplýsingar fyrir admin hvaða aðferðir hann getur gert.
+
 GET {baseURL}/users - birtir upplýsingar um notendur í gagnagrunn.
+
 POST {baseURL}/user - býr til nýjan notanda.
+
 DELETE {baseURL}/user/:id - eyðir notanda eftir id.
+
 POST {baseURL}/events - býr til nýjan viðburð.
+
 PATCH {baseURL}/events/:id - uppfærir upplýsingar um viðburð eftir id.
+
 DELETE {baseURL}/events/:id - eyðir viðburði eftir id.
  
 ---------------------------------------------------------------------------------------------
