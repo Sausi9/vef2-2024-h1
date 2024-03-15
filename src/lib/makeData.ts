@@ -12,7 +12,7 @@ const env : Environment = environment(process.env, loggerSingleton);
 
 makeCloudinaryConfig(env);
 
-async function writeNewData(data: Array<any>) {
+async function writeNewData(data: Array<unknown>) {
   const outpath = "./data/eventData.json";
   const dataString = JSON.stringify(data, null, 2);
   try {

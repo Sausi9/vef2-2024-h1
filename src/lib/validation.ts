@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
-import slugify from 'slugify';
 import xss from 'xss';
 
 import {

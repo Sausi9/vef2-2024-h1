@@ -2,9 +2,7 @@ import { USER } from "../types.js";
 import { xssSanitizer, genericSanitizer,validationCheck, stringValidator } from "./validation.js";
 import { NextFunction, Request, Response } from 'express';
 import bcrypt from 'bcrypt';
-
 import { getDatabase } from './db.js';
-import { findById } from "../auth/users.js";
 
 const db = getDatabase();
 
