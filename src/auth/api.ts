@@ -25,17 +25,18 @@ patch.default(express.Router);
 
 export const apiRouter = express.Router();
 
-const orderConnections = new Map();
+//const orderConnections = new Map();
 const adminConnections = [];
-
+/** 
 function returnResource(req, res) {
   return res.json(req.resource);
 }
+*/
 
 async function registerRoute(req, res) {
-  const { username, password = '' } = req.body;
+  const { name, password = '' } = req.body;
 
-  const result = await createUser(username, password);
+  const result = await createUser(name, password);
 
   delete result.password;
 
@@ -62,7 +63,7 @@ async function loginRoute(req, res) {
     expiresIn: tokenOptions.expiresIn,
   });
 }
-
+/**
 apiRouter.ws('/admin', (ws, req) => {
     const auth = req.headers.authorization;
     const token = auth.replace(/bearer /i, '');
@@ -89,7 +90,7 @@ apiRouter.ws('/admin', (ws, req) => {
       client.send(JSON.stringify(msg));
     });
   }
-
+*/
 
 
 
@@ -102,6 +103,7 @@ apiRouter.post(
   catchErrors(registerRoute)
 );
 
+apiRouter.get('/login')
 apiRouter.post(
   '/login',
   usernameValidator,

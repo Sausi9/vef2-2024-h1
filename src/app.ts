@@ -4,27 +4,16 @@ import { indexRouter } from './routes/index.js';
 import { cors } from './lib/cors.js';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
-
 import passport from './auth/passport.js';
 import expressWs from 'express-ws';
-import flash from 'express-flash';
-import session from 'express-session';
 import { environment } from './lib/environment.js';
 import { logger } from './lib/logger.js';
-
 import { getDatabase } from './lib/db.js';
 import { adminRouter } from './routes/admin.js';
-
-import { userRouter } from './routes/users.js';
 import { apiRouter } from './auth/api.js';
 
 
 dotenv.config();
-
-
-const db = getDatabase();
-
-
 
 const env = environment(process.env, logger);
 
@@ -33,15 +22,8 @@ if (!env) {
 }
 
 const { port , sessionSecret } = env;
-
 const path = dirname(fileURLToPath(import.meta.url));
 
-
-const sessionOptions = {
-  secret: sessionSecret,
-  resave: false,
-  saveUninitialized: false,
-};
 const app = express();
 
 
@@ -62,9 +44,6 @@ app.use(express.urlencoded({ extended: false}));
 
 app.use(express.json());
 app.use(passport.initialize());
-
-
-
 app.use(cors);
 
 

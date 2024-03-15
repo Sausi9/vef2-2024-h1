@@ -1,11 +1,11 @@
 import express from 'express';
 export const adminRouter = express.Router();
-import { listRegistrations, createRegistration,  deleteRegistration, getRegistration } from '../lib/registrations.js';
+import { listRegistrations, createRegistration,  deleteRegistration, getRegistration  } from '../lib/registrations.js';
 import { listEvents, createEvent, getEvent, deleteEvent , updateEvent } from '../lib/events.js';
 import { checkAuthenticated, checkNotAuthenticated } from '../app.js';
 import { logger } from '../lib/logger.js';
 import { deleteUser, listUsers , getUser, createUser} from '../lib/user.js';
-import { requireAdmin } from '../auth/passport.js';
+import { requireAdmin, requireAuthentication } from '../auth/passport.js';
 
 
 
@@ -41,16 +41,16 @@ export async function indexRoute(req, res) {
 }
 
 
+adminRouter.get('/admin', requireAdmin, indexRoute )
 
 adminRouter.post('/events' ,requireAdmin ,createEvent);
-
 adminRouter.patch('/events/:id',  requireAdmin,updateEvent);
 adminRouter.delete('/events/:id', requireAdmin, deleteEvent);
 
-adminRouter.get('/registrations',listRegistrations);
-adminRouter.get('/registrations/:id',getRegistration);
-adminRouter.post('/registrations', requireAdmin, createRegistration);
-adminRouter.delete('/registrations/:id',deleteRegistration);
+adminRouter.get('/registrations', requireAuthentication, listRegistrations )
+adminRouter.post('/registrations', requireAuthentication, createRegistration);
+adminRouter.get('/registrations/:id', requireAuthentication, getRegistration);
+adminRouter.delete('/registrations/:id', requireAuthentication, deleteRegistration);
 
 adminRouter.get('/users', requireAdmin,listUsers);
 adminRouter.post('/users',  requireAdmin, createUser);

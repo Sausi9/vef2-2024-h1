@@ -2,13 +2,22 @@ POST http://localhost:3000/register
 Content-Type: application/json
 
 {
-    "username": "admin2",
+    "username": "admin1",
     "password": "123"
 
 
 }
 
+####
 
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+    "username": "admin2",
+    "password": "123"
+
+}
 
 ####
 
@@ -23,83 +32,77 @@ Content-Type: application/json
 
 
 
-####
-POST http://localhost:3001/teams
-Content-Type: application/json
-
-{
-    "name": "TeamEgill"
-    
-
-}
-
-
-
-####
-GET http://localhost:3001/events/teamegill
 
 
 ####
 GET http://localhost:3000/events
 
 ####
-GET http://localhost:3000/2
-
-
-
+GET http://localhost:3000/events/2
 
 
 ####
-DELETE http://localhost:3001/teams/teamegill
-Content-Type: application/json
+GET http://localhost:3000/registrations/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiaWF0IjoxNzEwNDk4Njg1LCJleHAiOjE3MTA1MDIyODV9.hkUngvN8epmiRPi1veQhdE9EIMJ9NphRNjOGl3BSO10
 
-{
-    "slug": "TeamEgill"
-}
+###
 
+GET http://localhost:3000/registrations/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzEwNDk4ODEwLCJleHAiOjE3MTA1MDI0MTB9.CXl-BKY4mU-D9rEPZJY4bKDnv4F55NCokP4sXBRELNI
 
-####
-PATCH  http://localhost:3001/teams/TeamEgill
-Content-Type: application/json
-
-{
-    "name": "TeamEgill",
-    "description": "Besta lið í heimi"
-}
 
 
 
 
 ####
 GET http://localhost:3000/admin
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzEwNDk4ODEwLCJleHAiOjE3MTA1MDI0MTB9.CXl-BKY4mU-D9rEPZJY4bKDnv4F55NCokP4sXBRELNI
+
 
 
 ####
 GET http://localhost:3000/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzEwNDk4ODEwLCJleHAiOjE3MTA1MDI0MTB9.CXl-BKY4mU-D9rEPZJY4bKDnv4F55NCokP4sXBRELNI
 
 
 ####
-POST  http://localhost:3000/users
+GET http://localhost:3000/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzEwNDk5NzExLCJleHAiOjE3MTA1MDMzMTF9.tsFaWb23Yrgck9P5AwoKRpCTtrNJ--dTMkTC_pxxk9c
 
 
 
 ####
-
-POST http://localhost:3000/login
+POST http://localhost:3000/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzEwNDk5Mzk4LCJleHAiOjE3MTA1MDI5OTh9.EVqp2xdAMLizkd6PKzTwJjIk4tBP5NxZ5_gW3pDQYTQ
 Content-Type: application/json
 
 {
-    "username": "admin",
+    "username": "prufa",
     "password": "123"
 
 }
 
 
+
 ####
-GET http://localhost:3000/users
-Authorization: Bearer
-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzEwNDM0NjE2LCJleHAiOjE3MTA0MzgyMTZ9.hq8CgaUKWxLlSUYpsD8aOfe6sOHmju-Q1w8_OsMbm54
+DELETE http://localhost:3000/users/9
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzEwNDk5NzExLCJleHAiOjE3MTA1MDMzMTF9.tsFaWb23Yrgck9P5AwoKRpCTtrNJ--dTMkTC_pxxk9c
 
 
-###
+
+####
+POST http://localhost:3000/events
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzEwNTAxODcwLCJleHAiOjE3MTA1MDU0NzB9.1VQWoCDPAIAIAw3Yri1seZHZB0P_MrdtpyhE8c4yAS4
+Content-Type: application/json
+
+{
+    "title": "mitt event2",
+    "place": "hja mer",
+    "imageURL": "slod",
+    "date": "2024-01-23T15:20:53.955Z"
+}
+
+
+
+####
 

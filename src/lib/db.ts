@@ -237,15 +237,17 @@ export class Database {
   
     return null;
   }
-  
-  
 
 
-  async insertEvent(event: Omit<DatabaseEvent,'id'>
+
+
+  async insertEvent(
+  event: Omit<DatabaseEvent, 'id'>
   ): Promise<DatabaseEvent | null> {
+    const {title, place, imageURL, date} = event;
     const result = await this.query(
       'INSERT INTO events (title, place, event_image, date) VALUES ($1, $2, $3, $4) ON CONFLICT DO NOTHING RETURNING id, title, place, event_image, date',
-      [event.title, event.place, event.imageURL, event.date],
+      [title, place, imageURL,date],
     );
     if (result) {
       const resultEvent: DatabaseEvent = {

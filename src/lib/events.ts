@@ -7,8 +7,10 @@ import {
   validationCheck,
   xssSanitizerMany,
   xssSanitizer,
+  genericSanitizer
 } from './validation.js';
 import { EventMapper } from './mappers.js';
+import { DatabaseEvent } from '../types.js';
 import { Environment, environment } from './environment.js';
 import { logger as loggerSingleton } from './logger.js';
 import { makeCloudinaryConfig, uploadImage, deleteImage } from './cloudinary.js';
@@ -44,12 +46,14 @@ export async function getEvent(req: Request, res: Response) {
 export async function createEventHandler(req: Request, res: Response) {
   const { title, place, date, imageURL } = req.body;
   const image = await uploadImage(imageURL);
-  const createdEvent = await db.insertEvent({
+  const eventToCreate: Omit<DatabaseEvent, 'id'> = {
     title: title,
     place: place,
     date: date,
-    imageURL: image,
-  });
+    imageURL: image
+  };
+
+  const createdEvent= await db.insertEvent(eventToCreate );
 
   if (!createdEvent) {
     return res.status(500).json({ error: 'could not create event' });
@@ -59,9 +63,13 @@ export async function createEventHandler(req: Request, res: Response) {
 }
 
 export const createEvent = [
-  atLeastOneBodyValueValidator(['title', 'place', 'description', 'imageURL']),
-  genericSanitizerMany,
-  xssSanitizerMany,
+  stringValidator({ field: 'title', maxLength: 300 }),
+  stringValidator({ field: 'place',    maxLength: 200 }),
+  xssSanitizer('title'),
+  xssSanitizer('place'),
+  validationCheck,
+  genericSanitizer('title'),
+  genericSanitizer('place'), 
   createEventHandler,
 ];
 
@@ -71,7 +79,7 @@ export async function deleteEvent(req: Request, res: Response) {
   const deletedGame = await db.deleteEvent(req.params.id);
 
   if (!deletedGame) {
-    return res.status(500).json({ error: 'could not delete game' });
+    return res.status(500).json({ error: 'could not delete event' });
   }
 
   return res.status(204).json({});

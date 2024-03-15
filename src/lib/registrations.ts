@@ -5,6 +5,7 @@ import slugify from 'slugify';
 
 import { Registration } from '../types.js';
 import { RegistrationMapper } from './mappers.js';
+import { getUserByName } from './user.js';
 
 
 export async function listRegistrations(req: Request, res: Response, next: NextFunction) {
@@ -30,13 +31,12 @@ export async function getRegistration(req: Request, res: Response) {
 }
 
 
-
 export async function createRegistrationHandler(
     req: Request,
     res: Response,
     next: NextFunction,
   ) {
-    const id  = req.body.id;
+
     const eventTitle = req.body.eventTitle;
     const username = req.body.username;
     const user_id = req.body.user_id;
