@@ -26,7 +26,7 @@ async function strat(data, next) {
   }
 }
 
-/* export function requireAuthentication(req, res, next) {
+export function requireAuthentication(req, res, next) {
   return passport.authenticate(
     'jwt',
     { session: false },
@@ -47,8 +47,8 @@ async function strat(data, next) {
       return next();
     },
   )(req, res, next);
-} */
-/*
+} 
+
 export function addUserIfAuthenticated(req, res, next) {
   return passport.authenticate('jwt', { session: false }, (err, user) => {
     if (err) {
@@ -61,7 +61,7 @@ export function addUserIfAuthenticated(req, res, next) {
 
     return next();
   })(req, res, next);
-} */
+} 
 
 export function requireAdmin(req, res, next) {
   return passport.authenticate('jwt', { session: false }, (err, user, info) => {

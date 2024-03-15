@@ -5,6 +5,7 @@ import slugify from 'slugify';
 
 import { Registration } from '../types.js';
 import { RegistrationMapper } from './mappers.js';
+import { getUserByName } from './user.js';
 
 
 export async function listRegistrations(req: Request, res: Response, next: NextFunction) {
@@ -18,13 +19,26 @@ export async function listRegistrations(req: Request, res: Response, next: NextF
   return res.json(registrations);
 }
 
+export async function getRegistration(req: Request, res: Response) {
+
+  const registration = await getDatabase()?.getRegistration(req.params.id);
+
+  if (!registration) {
+    return res.status(404).json({ error: 'registration not found' });
+  }
+
+  return res.json(registration);
+}
+
+
+
 
 export async function createRegistrationHandler(
     req: Request,
     res: Response,
     next: NextFunction,
   ) {
-    const id  = req.body.id;
+    
     const username = req.body.username;
     const eventTitle = req.body.eventTitle;
     const user_id = req.body.user_id;

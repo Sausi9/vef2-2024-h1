@@ -181,7 +181,7 @@ export class Database {
 
 
   async getRegistration(id: string): Promise<Registration | null> {
-    const q = 'SELECT eventTitle, username, userId, eventId FROM registrations WHERE $id = $1';
+    const q = 'SELECT event_title, username, user_id, event_id FROM registrations WHERE id = $1';
     const result = await this.query(q, [id]);
 
     if (result && result.rows.length === 1) {
@@ -211,9 +211,9 @@ export class Database {
       FROM
         registrations
       JOIN
-        users ON users.id = registrations.userId
+        users ON users.id = registrations.user_id
       JOIN
-        events ON events.id = registrations.eventId
+        events ON events.id = registrations.event_id
       ORDER BY
         registrations.id
       LIMIT $1
@@ -237,15 +237,17 @@ export class Database {
   
     return null;
   }
-  
-  
 
 
-  async insertEvent(event: Omit<DatabaseEvent,'id'>
+
+
+  async insertEvent(
+  event: Omit<DatabaseEvent, 'id'>
   ): Promise<DatabaseEvent | null> {
+    const {title, place, imageURL, date} = event;
     const result = await this.query(
       'INSERT INTO events (title, place, event_image, date) VALUES ($1, $2, $3, $4) ON CONFLICT DO NOTHING RETURNING id, title, place, event_image, date',
-      [event.title, event.place, event.imageURL, event.date],
+      [title, place, imageURL,date],
     );
     if (result) {
       const resultEvent: DatabaseEvent = {

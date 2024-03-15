@@ -4,6 +4,7 @@ import { NextFunction, Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 
 import { getDatabase } from './db.js';
+import { findById } from "../auth/users.js";
 
 const db = getDatabase();
 
@@ -25,7 +26,7 @@ export async function createUserHandler(
     res: Response,
     next: NextFunction,
   ) {
-    const name  = req.body.name;
+    const name  = req.body.username;
     const password = await bcrypt.hash(req.body.password, 10)
     const admin = false;
     
@@ -47,15 +48,15 @@ export async function createUserHandler(
   }
 
 export const createUser = [
-    stringValidator({ field: 'name', maxLength: 64 }),
+    stringValidator({ field: 'username', maxLength: 64 }),
     stringValidator({
       field: 'password',
       maxLength: 256,
     }),
-    xssSanitizer('name'),
+    xssSanitizer('username'),
     xssSanitizer('password'),
     validationCheck,
-    genericSanitizer('name'),
+    genericSanitizer('username'),
     genericSanitizer('password'),
     createUserHandler,
   ];
@@ -66,7 +67,7 @@ export async function getUserByName(req: Request,
     next: NextFunction,
 )
 {
-    const name = req.body.name;
+    const name = req.body.username;
 
     const user = await db.getUserByUserName(name);
 
@@ -84,8 +85,13 @@ export async function deleteUser(
     res: Response,
     next: NextFunction,
   ) {
-    const username = req.body.username;
-    const user = await db.getUserByUserName(username);
+
+    const {id} = req.params;
+
+    const user = await db.getUserByUserId(id)
+    
+    
+    const username = user.name;
   
     if (!user) {
       return next();
@@ -107,13 +113,13 @@ export async function getUser(req: Request,
 {
     const {username} = req.params;
 
-    const team = await db.getUserByUserName(username);
+    const user = await db.getUserByUserName(username);
 
-    if (!team) {
+    if (!user) {
         return next();
     }
 
-    return res.json(team);
+    return res.json(user);
     
 }
 
