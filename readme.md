@@ -39,14 +39,19 @@ DELETE {baseURL}/events/:id - eyðir viðburði eftir id.
 Admin og innskráður notandi:
 
 GET {baseURL}/registrations - birtir allar skráningar á viðburði.
+
 GET {baseURL}/registrations/:id - birtir upplýsingar um skráningu á viðburði eftir id.
+
 DELETE {baseURL}/registrations/:id - eyðir skráningu eftir id.
+
 POST {baseURL}/registrations - skráir notanda á viðburð.
 
 ---------------------------------------------------------------------------------------------
 Óauðkenndir notendur (Allir):
 
 GET (baseURL)/ - birtir upplýsingar um hvað óauðkenndur notandi getur gert.
+
 GET {baseURL}/events - birtir upplýsingar um alla viðburði.
+
 GET {baseURL}/events/:id - birtir upplýsingar um viðburð eftir id.
 
