@@ -17,6 +17,7 @@ POST {baseURL}/register - býr til notenda aðgang.
 
 Innskráning: 
 POST {baseURL}/login - skráir notanda inn og gefur honumm access token.
+
 ---------------------------------------------------------------------------------------------
 Admin only: 
 
