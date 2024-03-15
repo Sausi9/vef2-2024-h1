@@ -95,6 +95,8 @@ export const updateEvent = [
     maxLength: 200,
     optional: true,
   }),
+  stringValidator({ field: 'date',  maxLength: 200 }),
+  stringValidator({ field: 'imageURL',  maxLength: 200 }),
   atLeastOneBodyValueValidator(['title', 'place']),
   xssSanitizer('title'),
   xssSanitizer('place'),
@@ -115,16 +117,20 @@ export async function updateEventHandler(
   }
   
 
-  const {title, place} = req.body;
+  const {title, place, date, imageURL} = req.body;
 
   const fields = [
     typeof title === 'string' && title ? 'title' : null,
     typeof place === 'string' && place ? 'place' : null,
+    typeof date === 'string' && date ? 'date' : null,
+    typeof imageURL === 'string' && imageURL ? 'event_image' : null
   ];
 
   const values = [
     typeof title === 'string' && title ? title : null,
     typeof place === 'string' && place ? place : null,
+    typeof date === 'string' && date ? date : null,
+    typeof imageURL === 'string' && imageURL ? imageURL : null,
   ];
 
   const updated = await db.conditionalUpdate(
