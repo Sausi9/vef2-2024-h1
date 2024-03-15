@@ -57,15 +57,15 @@ async function create() {
                 date: data.date,
                 imageURL: data.event_image
             };
+            // eslint-disable-next-line
             const insertedEvent = await db.insertEvent(eventToBeInserted);
-            console.log('Inserted event with title ', insertedEvent.title);
         }
     }
     const users = ['Audunn','Dagur','Egill','osk7','someGuy'];
     for(let i = 0; i < 5; i++){
         const event = await db.getEvent((i+1).toString());
+        //eslint-disable-next-line
         const regInserted = await db.insertRegistration(users[i],event.title);
-        console.log('Inserted registration with from user ', regInserted.userId ,' to event ', regInserted.eventTitle);
     }
     await db.close();
 }
