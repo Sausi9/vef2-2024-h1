@@ -25,9 +25,9 @@ patch.default(express.Router);
 export const apiRouter = express.Router();
 
 async function registerRoute(req, res) {
-  const { name, password = '' } = req.body;
+  const { username, password = '' } = req.body;
 
-  const result = await createUser(name, password);
+  const result = await createUser(username, password);
 
   delete result.password;
 
