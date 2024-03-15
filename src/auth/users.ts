@@ -1,24 +1,24 @@
 import bcrypt from 'bcrypt';
-import dotenv from 'dotenv';
 import xss from 'xss';
 import { getDatabase } from '../lib/db.js';
 import { logger } from '../lib/logger.js';
-import { Database} from '../lib/db.js';
+import { environment } from '../lib/environment.js';
+import { logger as loggerSingleton } from '../lib/logger.js';
 
 const db = getDatabase();
 
-dotenv.config();
+const env = environment(process.env, loggerSingleton);
 
 /**
  * Hjálparföll fyrir notendur, uppfletting, búa til, uppfæra.
  */
 
-const { BCRYPT_ROUNDS: bcryptRounds = '1' } = process.env;
+const { bcryptRounds: bcryptRounds = 1 } = env;
 
-export async function createUser(username, password) {
+export async function createUser(username : string, password : string) {
   const hashedPassword = await bcrypt.hash(
     password,
-    parseInt(bcryptRounds, 10)
+    bcryptRounds
   );
 
   const q = `
@@ -72,13 +72,4 @@ export async function findById(id) {
   }
 
   return null;
-}
-
-function isInt(i) {
-  return i !== '' && Number.isInteger(Number(i));
-}
-
-// TODO move to utils
-function isString(s) {
-  return typeof s === 'string';
 }

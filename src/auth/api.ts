@@ -4,14 +4,13 @@ import { catchErrors } from '../lib/catch-errors.js';
 import { logger } from '../lib/logger.js';
 import { validationCheck } from '../lib/validation.js';
 import {
-  atLeastOneBodyValueValidator,
   passwordValidator,
   usernameAndPaswordValidValidator,
   usernameDoesNotExistValidator,
   usernameValidator,
 } from '../lib/validation.js';
-import { jwtOptions, requireAdmin, tokenOptions } from './passport.js';
-import { createUser, findById, findByUsername} from './users.js';
+import { jwtOptions, tokenOptions } from './passport.js';
+import { createUser, findByUsername} from './users.js';
 
 import patch from 'express-ws/lib/add-ws-method.js';
 
@@ -24,14 +23,6 @@ import patch from 'express-ws/lib/add-ws-method.js';
 patch.default(express.Router);
 
 export const apiRouter = express.Router();
-
-//const orderConnections = new Map();
-const adminConnections = [];
-/** 
-function returnResource(req, res) {
-  return res.json(req.resource);
-}
-*/
 
 async function registerRoute(req, res) {
   const { name, password = '' } = req.body;
@@ -63,36 +54,6 @@ async function loginRoute(req, res) {
     expiresIn: tokenOptions.expiresIn,
   });
 }
-/**
-apiRouter.ws('/admin', (ws, req) => {
-    const auth = req.headers.authorization;
-    const token = auth.replace(/bearer /i, '');
-  
-    try {
-      jwt.verify(token, jwtOptions.secretOrKey);
-    } catch (e) {
-      // throws if not valid
-      ws.send(JSON.stringify({ error: 'invalid token' }));
-      ws.close();
-    }
-  
-    adminConnections.push(ws);
-    ws.on('close', () => {
-      const index = adminConnections.indexOf(ws);
-      adminConnections.splice(index, 1);
-    });
-  
-    ws.send(JSON.stringify({ status: 'loggedin' }));
-  });
-  
-  function broadcastToAdmins(msg) {
-    adminConnections.forEach((client) => {
-      client.send(JSON.stringify(msg));
-    });
-  }
-*/
-
-
 
 apiRouter.post(
   '/register',

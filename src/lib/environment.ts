@@ -9,9 +9,12 @@ export type Environment = {
   port: number;
   sessionSecret: string;
   connectionString: string;
+  jwtString: string
   cloudinaryName: string;
   apiKey: string;
   apiSecret: string;
+  tokenTime: number;
+  bcryptRounds: number;
 };
 
 let parsedEnv: Environment | null = null;
@@ -34,9 +37,12 @@ export function environment(
     PORT: port, 
     SESSION_SECRET: sessionSecret, 
     DATABASE_URL: envConnectionString, 
+    JWT_SECRET: jwtString,
     CLOUDINARY_CLOUD_NAME : cloudinaryName,
     CLOUDINARY_API_KEY : apiKey,
-    CLOUDINARY_API_SECRET : apiSecret 
+    CLOUDINARY_API_SECRET : apiSecret,
+    TOKEN_LIFETIME: tokens,
+    BCRYPT_ROUNDS: bcrypt
   } = env;
 
   let error = false;
@@ -46,7 +52,7 @@ export function environment(
     error = true;
   }
 
-  let usedPort;
+  let usedPort : number;
   const parsedPort = Number.parseInt(port ?? '', 10);
   if (port && Number.isNaN(parsedPort)) {
     logger.error('PORT must be defined as a number', port);
@@ -59,6 +65,9 @@ export function environment(
     usedPort = DEFAULT_PORT;
   }
 
+  const tokenTime = Number.parseInt(tokens ?? '', 10);
+  const bcryptRounds = Number.parseInt(bcrypt ?? '', 10);
+
   if (error) {
     return null;
   }
@@ -70,9 +79,12 @@ export function environment(
     port: usedPort,
     sessionSecret,
     connectionString,
+    jwtString,
     cloudinaryName,
     apiKey,
-    apiSecret
+    apiSecret,
+    tokenTime,
+    bcryptRounds
   };
 
   return parsedEnv;

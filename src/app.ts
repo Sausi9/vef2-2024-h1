@@ -1,4 +1,3 @@
-import dotenv from 'dotenv';
 import express, {Request, Response } from 'express';
 import { indexRouter } from './routes/index.js';
 import { cors } from './lib/cors.js';
@@ -8,12 +7,8 @@ import passport from './auth/passport.js';
 import expressWs from 'express-ws';
 import { environment } from './lib/environment.js';
 import { logger } from './lib/logger.js';
-import { getDatabase } from './lib/db.js';
 import { adminRouter } from './routes/admin.js';
 import { apiRouter } from './auth/api.js';
-
-
-dotenv.config();
 
 const env = environment(process.env, logger);
 
@@ -21,7 +16,7 @@ if (!env) {
   process.exit(1);
 }
 
-const { port , sessionSecret } = env;
+const { port } = env;
 const path = dirname(fileURLToPath(import.meta.url));
 
 const app = express();

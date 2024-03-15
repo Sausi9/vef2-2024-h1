@@ -2,10 +2,8 @@ import { Request, Response , NextFunction} from 'express';
 import { getDatabase } from '../lib/db.js';
 import {
   atLeastOneBodyValueValidator,
-  genericSanitizerMany,
   stringValidator,
   validationCheck,
-  xssSanitizerMany,
   xssSanitizer,
   genericSanitizer
 } from './validation.js';
@@ -84,8 +82,6 @@ export async function deleteEvent(req: Request, res: Response) {
 
   return res.status(204).json({});
 }
-
-
 
 export const updateEvent = [
   stringValidator({ field: 'title', maxLength: 300, optional: true }),

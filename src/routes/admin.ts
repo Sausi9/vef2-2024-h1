@@ -1,10 +1,8 @@
 import express from 'express';
 export const adminRouter = express.Router();
 import { listRegistrations, createRegistration,  deleteRegistration, getRegistration  } from '../lib/registrations.js';
-import { listEvents, createEvent, getEvent, deleteEvent , updateEvent } from '../lib/events.js';
-import { checkAuthenticated, checkNotAuthenticated } from '../app.js';
-import { logger } from '../lib/logger.js';
-import { deleteUser, listUsers , getUser, createUser} from '../lib/user.js';
+import { createEvent, deleteEvent , updateEvent } from '../lib/events.js';
+import { deleteUser, listUsers, createUser } from '../lib/user.js';
 import { requireAdmin, requireAuthentication } from '../auth/passport.js';
 
 

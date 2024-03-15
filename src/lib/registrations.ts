@@ -1,12 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
-import { getDatabase} from './db.js';
-import { stringValidator, registrationDoesNotExistValidator, xssSanitizer,validationCheck,genericSanitizer, atLeastOneBodyValueValidator} from './validation.js';
-import slugify from 'slugify';
-
-import { Registration } from '../types.js';
-import { RegistrationMapper } from './mappers.js';
-import { getUserByName } from './user.js';
-
+import { getDatabase } from './db.js';
+import { stringValidator, registrationDoesNotExistValidator, xssSanitizer,validationCheck,genericSanitizer } from './validation.js';
 
 export async function listRegistrations(req: Request, res: Response, next: NextFunction) {
     const registrations = await getDatabase()?.getRegistrations();

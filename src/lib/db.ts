@@ -1,10 +1,6 @@
 import pg from 'pg';
-import slugify from 'slugify';
-import {Event, DatabaseEvent, Registration, USER } from '../types.js';
+import { DatabaseEvent, Registration, USER } from '../types.js';
 import {
-  EventMapper,
-  DatabaseEventMapper,
-  RegistrationMapper,
   UserMapper,
   UsersMapper,
 } from './mappers.js';
@@ -168,6 +164,7 @@ export class Database {
   }
 
   async deleteEvent(id: string): Promise<boolean> {
+    // eslint-disable-next-line
     const result2 = await this.query('DELETE FROM registrations WHERE event_id = $1', [id]);
 
     const result = await this.query('DELETE FROM events WHERE id = $1', [
@@ -344,6 +341,7 @@ export class Database {
   async deleteUserByUsername(
     username: string,
   ): Promise<boolean> {
+    // eslint-disable-next-line
     const result2 = await this.query('DELETE FROM registrations WHERE username = $1', [username]);
 
     const result = await this.query('DELETE FROM users WHERE name = $1', [
@@ -425,9 +423,9 @@ export class Database {
   
     return result;
   }
-  
-
 }
+
+
 let db: Database | null = null;
 
 /**
