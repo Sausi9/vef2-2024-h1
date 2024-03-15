@@ -15,8 +15,12 @@ Innskáning fyrir admin er { "username": "admin", "password":"123"}
 Nýskráning: 
 POST {baseURL}/register - býr til notenda aðgang.
 
+t.d. {"username":"nafn", "password": "lykilorð"}
+
 Innskráning: 
 POST {baseURL}/login - skráir notanda inn og gefur honumm access token.
+
+t.d. {"username":"nafn", "password": "lykilorð"}
 
 ---------------------------------------------------------------------------------------------
 Admin only: 
@@ -27,11 +31,18 @@ GET {baseURL}/users - birtir upplýsingar um notendur í gagnagrunn.
 
 POST {baseURL}/user - býr til nýjan notanda.
 
+t.d. {"username": "nafn", "password": "lykilorð"}
+
+
 DELETE {baseURL}/user/:id - eyðir notanda eftir id.
 
 POST {baseURL}/events - býr til nýjan viðburð.
 
+t.d. {"title": "titill","place": "staðsetning","date": "dagsetning","imageURL": "slóð á mynd"}
+
 PATCH {baseURL}/events/:id - uppfærir upplýsingar um viðburð eftir id.
+
+t.d. {"title": "breytturtitill","place": "breyttstaðsetning","date": "dagsetning","imageURL": "slóð á mynd"}
 
 DELETE {baseURL}/events/:id - eyðir viðburði eftir id.
  
@@ -45,6 +56,8 @@ GET {baseURL}/registrations/:id - birtir upplýsingar um skráningu á viðburð
 DELETE {baseURL}/registrations/:id - eyðir skráningu eftir id.
 
 POST {baseURL}/registrations - skráir notanda á viðburð.
+
+t.d. {"username": "nafnnotanda", "eventTitle": "heitividburd"}
 
 ---------------------------------------------------------------------------------------------
 Óauðkenndir notendur (Allir):
