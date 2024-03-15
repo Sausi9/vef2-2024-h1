@@ -39,15 +39,7 @@ export async function createRegistrationHandler(
 
     const eventTitle = req.body.eventTitle;
     const username = req.body.username;
-    const user_id = req.body.user_id;
-    const event_id = req.body.eventId;
-  
-    const registrationToCreate: Omit<Registration, 'id'> = {
-      eventTitle: eventTitle,
-      username: username,
-      userId: user_id,
-      eventId: event_id
-    };
+
   
     const createdRegistration= await getDatabase()?.insertRegistration(username,eventTitle);
   
@@ -59,18 +51,14 @@ export async function createRegistrationHandler(
   }
 
 export const createRegistration = [
-    stringValidator({ field: 'user_id', maxLength: 64 }),
-    stringValidator({
-      field: '',
-      valueRequired: false,
-      maxLength: 1000,
-    }),
+    stringValidator({ field: 'username', maxLength: 64 }),
+    stringValidator({ field: 'eventTitle', maxLength: 64 }),
     registrationDoesNotExistValidator,
-    xssSanitizer('name'),
-    xssSanitizer('description'),
+    xssSanitizer('username'),
+    xssSanitizer('eventTitle'),
     validationCheck,
-    genericSanitizer('name'),
-    genericSanitizer('description'),
+    genericSanitizer('username'),
+    genericSanitizer('eventTitle'),
     createRegistrationHandler,
   ];
 
@@ -99,7 +87,7 @@ export const createRegistration = [
     }
   
     // If deletion was successful, send a 204 No Content response to indicate success without returning any content
-    return res.status(204).end();
+    return res.status(200).json({message: "Successfully deleted registration"});
   }
   
 
