@@ -64,7 +64,6 @@ async function create() {
     for(let i = 0; i < 5; i++){
         const event = await db.getEvent((i+1).toString());
         const regInserted = await db.insertRegistration(users[i],event.title);
-        console.log(regInserted);
     }
     await db.close();
 }

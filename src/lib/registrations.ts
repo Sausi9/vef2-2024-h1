@@ -31,16 +31,14 @@ export async function getRegistration(req: Request, res: Response) {
 }
 
 
-
-
 export async function createRegistrationHandler(
     req: Request,
     res: Response,
     next: NextFunction,
   ) {
-    
-    const username = req.body.username;
+
     const eventTitle = req.body.eventTitle;
+    const username = req.body.username;
     const user_id = req.body.user_id;
     const event_id = req.body.eventId;
   

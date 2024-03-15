@@ -9,6 +9,9 @@ export type Environment = {
   port: number;
   sessionSecret: string;
   connectionString: string;
+  cloudinaryName: string;
+  apiKey: string;
+  apiSecret: string;
 };
 
 let parsedEnv: Environment | null = null;
@@ -27,7 +30,14 @@ export function environment(
     return parsedEnv;
   }
 
-  const { PORT: port, SESSION_SECRET: sessionSecret, DATABASE_URL: envConnectionString } = env;
+  const { 
+    PORT: port, 
+    SESSION_SECRET: sessionSecret, 
+    DATABASE_URL: envConnectionString, 
+    CLOUDINARY_CLOUD_NAME : cloudinaryName,
+    CLOUDINARY_API_KEY : apiKey,
+    CLOUDINARY_API_SECRET : apiSecret 
+  } = env;
 
   let error = false;
 
@@ -60,6 +70,9 @@ export function environment(
     port: usedPort,
     sessionSecret,
     connectionString,
+    cloudinaryName,
+    apiKey,
+    apiSecret
   };
 
   return parsedEnv;
