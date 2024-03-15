@@ -142,7 +142,7 @@ export class Database {
         title: row.title,
         place: row.place,
         date: row.date,
-        imageURL: row.image
+        imageURL: row.event_image
       };
       return event;
     }
@@ -168,6 +168,8 @@ export class Database {
   }
 
   async deleteEvent(id: string): Promise<boolean> {
+    const result2 = await this.query('DELETE FROM registrations WHERE event_id = $1', [id]);
+
     const result = await this.query('DELETE FROM events WHERE id = $1', [
       id,
     ]);
@@ -342,6 +344,8 @@ export class Database {
   async deleteUserByUsername(
     username: string,
   ): Promise<boolean> {
+    const result2 = await this.query('DELETE FROM registrations WHERE username = $1', [username]);
+
     const result = await this.query('DELETE FROM users WHERE name = $1', [
       username,
     ]);
