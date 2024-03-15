@@ -35,8 +35,7 @@ export async function uploadImage(filepath: string) : Promise<string> {
 }
 
 export async function deleteImage(imgUrl : string){
-    const imgId = imgUrl.slice(imgUrl.lastIndexOf('/')+1,imgUrl.indexOf('.'));
-    console.log(imgId);
+    const imgId = imgUrl.slice(imgUrl.lastIndexOf('/')+1,imgUrl.lastIndexOf('.'));
     try{
         const destroyRes = await deleteAsync(imgId);
         console.info(destroyRes);

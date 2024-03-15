@@ -74,9 +74,7 @@ export const createEvent = [
 ];
 
 export async function deleteEvent(req: Request, res: Response) {
-  console.log("hello");
   const eventToBeDeleted = await db.getEvent(req.params.id);
-  console.log(eventToBeDeleted.imageURL);
   await deleteImage(eventToBeDeleted.imageURL);
   const deletedGame = await db.deleteEvent(req.params.id);
 
