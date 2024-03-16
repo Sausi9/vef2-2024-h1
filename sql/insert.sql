@@ -2,8 +2,8 @@ INSERT INTO
     users (name, password, admin) 
 VALUES 
 ('admin', '$2a$11$pgj3.zySyFOvIQEpD7W6Aund1Tw.BFarXxgLJxLbrzIv/4Nteisii', true),
-('Audunn', 'audunn2', false),
-('Dagur','Dagur2',false),
-('Egill','Egill2',false),
-('osk7','osk123',false),
-('someGuy','password',false);
+('Audunn', '$2a$11$pgj3.zySyFOvIQEpD7W6Aund1Tw.BFarXxgLJxLbrzIv/4Nteisii', false),
+('Dagur','$2a$11$pgj3.zySyFOvIQEpD7W6Aund1Tw.BFarXxgLJxLbrzIv/4Nteisii',false),
+('Egill','$2a$11$pgj3.zySyFOvIQEpD7W6Aund1Tw.BFarXxgLJxLbrzIv/4Nteisii',false),
+('osk7','$2a$11$pgj3.zySyFOvIQEpD7W6Aund1Tw.BFarXxgLJxLbrzIv/4Nteisii',false),
+('someGuy','$2a$11$pgj3.zySyFOvIQEpD7W6Aund1Tw.BFarXxgLJxLbrzIv/4Nteisii',false);
