@@ -38,11 +38,11 @@ DELETE {baseURL}/user/:id - eyðir notanda eftir id.
 
 POST {baseURL}/events - býr til nýjan viðburð.
 
-t.d. {"title": "titill","place": "staðsetning","date": "dagsetning","imageURL": "slóð á mynd"}
+t.d. {"title": "titill","place": "staðsetning","date": "dagsetning","imageURL": "slóð myndar á disk"}
 
 PATCH {baseURL}/events/:id - uppfærir upplýsingar um viðburð eftir id.
 
-t.d. {"title": "breytturtitill","place": "breyttstaðsetning","date": "dagsetning","imageURL": "slóð á mynd"}
+t.d. {"title": "breytturtitill","place": "breyttstaðsetning","date": "dagsetning","imageURL": "slóð myndar á disk"}
 
 DELETE {baseURL}/events/:id - eyðir viðburði eftir id.
  
@@ -55,9 +55,9 @@ GET {baseURL}/registrations/:id - birtir upplýsingar um skráningu á viðburð
 
 DELETE {baseURL}/registrations/:id - eyðir skráningu eftir id.
 
-POST {baseURL}/registrations - skráir notanda á viðburð.
+POST {baseURL}/registrations - skráir notanda (sem er til) á viðburð (sem er til).
 
-t.d. {"username": "nafnnotanda", "eventTitle": "heitividburd"}
+t.d. {"username": "nafn notanda", "eventTitle": "heiti vidburdar"}
 
 ---------------------------------------------------------------------------------------------
 Óauðkenndir notendur (Allir):
