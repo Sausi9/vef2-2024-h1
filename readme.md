@@ -12,7 +12,7 @@ Innskáning fyrir admin er { "username": "admin", "password":"123"}
 
 ## Leiðbeiningar
 
-Keyra eftirfarandi til að still upp verkefnið.
+Keyra eftirfarandi til að stilla upp verkefnið.
 
 ```
 npm run setup 
