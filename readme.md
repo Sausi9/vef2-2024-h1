@@ -10,6 +10,17 @@ Við ákvaðum að útbúa vefþjónustu fyrir viðburðarkerfi sem leyfir skrá
 
 Innskáning fyrir admin er { "username": "admin", "password":"123"}
 
+## Leiðbeiningar
+
+Keyra eftirfarandi til að still upp verkefnið.
+
+```
+npm run setup 
+npm run dev
+```
+
+Setup bætir 30 viðburðum í events töflu sem voru fengnir út frá hópverkefni 2 í vefforitun 1 2022. Myndir fyrir events voru fengnar af picsum. Setup bætir 6 notendum í users töflu, sem hafa allir passwordið 123 og 1 af þessum notendum er admin, hinir ekki. Síðan eru 5 skráningar settar í registration töfluna. Síðan mun dev keyra upp server.
+
 ## CRUD leiðbeiningar
 
 Nýskráning: 
